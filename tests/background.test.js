@@ -15,14 +15,24 @@ test('Worker registriert Nachrichten synchron und beantwortet erst nach sicherer
   assert.equal(denied.ok,false);
 });
 
-test('Schließen eines fehlerhaften Tabs entfernt auch den veralteten Warn-Badge', async () => {
-  const {api,model}=browserDouble(defaultState());
+test('Tab-Fehler bleiben im Seitenstatus und überschreiben weder Icon noch Tooltip', async () => {
+  const {api,model,sender}=browserDouble(defaultState());
   model.origins=['http://*/*','https://*/*'];model.tabs=[{id:1,url:'https://gone.example/'}];model.failTab=1;
   const worker=installBackground(api);await worker.start();
-  assert.equal(model.badge,'!');
+  for (const [command,badge,title] of [
+    [{type:'status'},'ON','Eingeschaltet'],
+    [{type:'pause',minutes:5},'II','Pause'],
+    [{type:'enabled',value:false},'OFF','Ausgeschaltet']
+  ]) {
+    const status=await worker.handle(command,sender);
+    assert.equal(status.pages[1].reason,'reload');
+    assert.equal(model.badge,badge);
+    assert.equal(model.title,`Local Grayscale · ${title}`);
+  }
   api.tabs.onRemoved.emit(1);
   for(let i=0;i<10;i++)await new Promise(resolve=>setImmediate(resolve));
-  assert.equal(model.badge,'ON');
+  assert.equal((await worker.handle({type:'status'},sender)).pages[1],undefined);
+  assert.equal(model.badge,'OFF');
 });
 
 test('Tab-Ereignisse behandeln nur den betroffenen Tab und schreiben keine Einstellungen', async () => {

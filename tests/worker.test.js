@@ -53,6 +53,8 @@ test('Rechteverlust macht alte Dokumentantworten ungültig und entfernt Registri
   assert.equal(after.active,false);
   assert.ok(after.revision>before.revision);
   assert.equal(model.scripts.length,0);
+  assert.equal(model.badge,'!');
+  assert.equal(model.title,'Local Grayscale · Aktion erforderlich');
 });
 
 test('Beschädigtes Schema und fehlender sicherer Speicher stoppen Injektion ohne stilles Zurücksetzen', async () => {
@@ -62,6 +64,7 @@ test('Beschädigtes Schema und fehlender sicherer Speicher stoppen Injektion ohn
   const worker=createCoordinator(api,()=>1000); await worker.start();
   const status=await worker.handle({type:'status'},sender);
   assert.equal(Boolean(status.error),true);
+  assert.equal(model.badge,'!');
   assert.equal(model.scripts.length,0);
   assert.deepEqual(model.db.state,corrupt);
   await assert.rejects(worker.handle({type:'enabled',value:true},sender));
@@ -72,6 +75,7 @@ test('Beschädigtes Schema und fehlender sicherer Speicher stoppen Injektion ohn
   const failed=createCoordinator(broken.api); await failed.start();
   assert.equal(Boolean((await failed.handle({type:'status'},broken.sender)).error),true);
   assert.equal(broken.model.scripts.length,0);
+  assert.equal(broken.model.badge,'!');
   assert.equal(broken.model.db.state,undefined);
 });
 

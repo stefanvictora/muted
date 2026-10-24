@@ -63,7 +63,8 @@ export function createCoordinator(api, now = Date.now) {
     if (state?.pauseUntil !== null && state?.pauseUntil <= now()) return reconcile();
   }
   async function updateBadge() {
-    const attention = !grants.global || Object.values(pages).some(p=>p.reason==='reload');
+    // Individual tab warnings belong in the popup, not the global action status.
+    const attention = !grants.global;
     const badge = attention ? '!' : !state.enabled ? 'OFF' : state.pauseUntil > now() ? 'II' : 'ON';
     await api.action.setBadgeText({text:badge});
     await api.action.setTitle({title:`Local Grayscale · ${attention?'Aktion erforderlich':!state.enabled?'Ausgeschaltet':state.pauseUntil > now()?'Pause':'Eingeschaltet'}`});
@@ -152,11 +153,9 @@ export function createCoordinator(api, now = Date.now) {
     await pass?.done;
   }
   async function forgetTab(tabId) {
-    const warned=pages[tabId]?.reason==='reload';
     delete pages[tabId];
     requestedPass?.tabIds?.delete(tabId);
     if (effects) removedTabs.add(tabId);
-    if (warned && !error) await updateBadge();
   }
   async function document(message,sender) {
     exactKeys(message,['type']);

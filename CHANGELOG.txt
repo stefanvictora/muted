@@ -1,5 +1,7 @@
 Local Grayscale 0.2.0 — 24. Oktober 2026
 
+- Einzelne Tab-Fehler erscheinen nur im Popup der betroffenen Seite. Das Icon
+  zeigt weiterhin Ein/Aus/Pause; Warnungen bleiben für fehlende Rechte und Grundfehler.
 - Ein gemeinsamer, einmalig angeforderter HTTP-/HTTPS-Zugriff für beide Modi.
   Listen und Modus steuern den Filter, nicht mehr die Browserrechte.
 - Rechteverwaltung in den Einstellungen entfällt. Ein Hinweis zum Freigeben

@@ -33,7 +33,7 @@ export function browserDouble(saved) {
     },
     tabs: {query:async()=>structuredClone(model.tabs),get:async id=>{const tab=model.tabs.find(tab=>tab.id===id);if(!tab)throw new Error('closed');return structuredClone(tab);},onUpdated:events(),onRemoved:events(),onActivated:events(),sendMessage:async()=>({applied:false})},
     alarms: {onAlarm:events(), get:async name=>model.alarms.get(name),create:(name,value)=>{model.alarms.set(name,{scheduledTime:value.when});},clear:async name=>model.alarms.delete(name)},
-    action: {setBadgeText:async value=>{model.badge=value.text;},setTitle:async()=>{}}
+    action: {setBadgeText:async value=>{model.badge=value.text;},setTitle:async value=>{model.title=value.title;}}
   };
   return {api,model, sender:{id:'test-id',url:'chrome-extension://test-id/popup/popup.html',origin:'chrome-extension://test-id'}};
 }

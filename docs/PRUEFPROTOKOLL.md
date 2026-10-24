@@ -17,7 +17,9 @@ Zusätzliche Prüfungen der Hintergrundarbeit:
 - Status und Dokumententscheidungen erzeugen nach Initialisierung keine Speicher-, Berechtigungs-,
   Registrierungs-, Alarm- oder Tab-Abfragen, solange keine Pause abgelaufen ist.
 - Tab-Ereignisse bearbeiten nur den betroffenen Tab. Ein bestätigter Tab wird beim Aktivieren nicht
-  erneut injiziert. Schließen entfernt seinen Status und gegebenenfalls den Warn-Badge.
+  erneut injiziert. Schließen entfernt seinen Status. Einzelne Tab-Fehler bleiben
+  im Popup; Icon und Tooltip zeigen weiterhin Ein/Aus/Pause. Fehlende Rechte und
+  grundlegende Fehler behalten das Ausrufezeichen (automatisiert geprüft).
 - Ein Worker-Neustart mit unveränderter Registrierung durchsucht keine Tabs; eine neue Registrierung
   erreicht dagegen bereits geöffnete Seiten.
 - Oberflächen werden nach abgeschlossenen Abgleichen benachrichtigt. Statuslesen löst keine weiteren
