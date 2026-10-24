@@ -1,17 +1,20 @@
 import { registration, decide, target } from '../core/policy.js';
-import { matchesDomain } from '../core/domains.js';
 
 export async function syncRegistration(api, state, grants, now) {
   const desired = registration(state, grants, now);
   const current = await api.scripting.getRegisteredContentScripts({ ids: ['local-grayscale'] });
   if (!desired) {
-    if (current.length) await api.scripting.unregisterContentScripts({ ids: ['local-grayscale'] });
-  } else if (current.length) await api.scripting.updateContentScripts([desired]);
-  else await api.scripting.registerContentScripts([desired]);
+    if (!current.length) return false;
+    await api.scripting.unregisterContentScripts({ ids: ['local-grayscale'] });
+  } else if (current.length) {
+    if (Object.entries(desired).every(([key,value])=>JSON.stringify(current[0][key])===JSON.stringify(value))) return false;
+    await api.scripting.updateContentScripts([desired]);
+  } else await api.scripting.registerContentScripts([desired]);
+  return true;
 }
 
-export async function syncTabs(api, state, grants, now, previous = {}, isCurrent = () => true) {
-  const tabs = await api.tabs.query({});
+export async function syncTabs(api, state, grants, now, previous = {}, isCurrent = () => true, selectedTabs) {
+  const tabs = selectedTabs ?? await api.tabs.query({});
   const pages = {};
   // At most four top-level documents are touched concurrently.
   for (let offset=0; offset<tabs.length; offset+=4) {
@@ -20,7 +23,7 @@ export async function syncTabs(api, state, grants, now, previous = {}, isCurrent
       const page = target(tab.url);
       const decision = decide(state,tab.url,grants,now);
       const config = {active:decision.wanted, expectedUrl:page?.url ?? null, revision:state.revision};
-      const access = page && (grants.global || grants.sites.some(d=>matchesDomain(page.host,d)));
+      const access = page && grants.global;
       if (tab.discarded || tab.frozen) {
         pages[tab.id]={...decision,reason:'sleeping'};
         return;

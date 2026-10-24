@@ -19,9 +19,10 @@ export function installBackground(api) {
   api.permissions.onAdded.addListener(refresh);
   api.permissions.onRemoved.addListener(refresh);
   api.alarms.onAlarm.addListener(alarm=>{if(alarm.name===PAUSE_ALARM) refresh();});
-  api.tabs.onUpdated.addListener((_id,change)=>{if(change.status==='complete' || change.url || change.frozen===false || change.discarded===false) refresh();});
-  api.tabs.onActivated.addListener(refresh);
-  api.tabs.onRemoved.addListener(refresh);
+  const refreshTab = (id,force=false) => { coordinator.refreshTab(id,force).catch(failed); };
+  api.tabs.onUpdated.addListener((id,change)=>{if(change.status==='complete' || change.url || change.frozen===false || change.discarded===false) refreshTab(id,true);});
+  api.tabs.onActivated.addListener(({tabId})=>refreshTab(tabId));
+  api.tabs.onRemoved.addListener(id=>{coordinator.forgetTab(id).catch(failed);});
   coordinator.start().catch(failed);
   return coordinator;
 }

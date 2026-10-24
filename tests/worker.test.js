@@ -11,9 +11,10 @@ test('Ersteinrichtung wartet auf echte Freigabe; schnelle Schaltungen bleiben se
   assert.equal(model.trusted,true);
   assert.equal(model.scripts.length,0);
   assert.equal((await worker.handle({type:'status'},sender)).state.mode,'global');
-  await assert.rejects(worker.handle({type:'mode',mode:'global'},sender));
-  model.origins=['http://*/*','https://*/*'];
   await worker.handle({type:'mode',mode:'global'},sender);
+  assert.equal(model.scripts.length,0);
+  model.origins=['http://*/*','https://*/*'];
+  await worker.handle({type:'grants'},sender);
   assert.equal(model.scripts.length,1);
   model.latency=5;
   await Promise.all([worker.handle({type:'enabled',value:false},sender),worker.handle({type:'enabled',value:true},sender),worker.handle({type:'enabled',value:false},sender)]);
@@ -35,8 +36,9 @@ test('Controller darf einen neueren aktiven Zustand beim Ausschalten nicht als E
 test('Nicht bestätigte Bereinigung nach Rechteentzug verlangt Neuladen', async () => {
   const {api,model,sender}=browserDouble(defaultState());
   model.origins=['http://*/*','https://*/*'];model.tabs=[{id:1,url:'https://reddit.com/'}];
-  const worker=createCoordinator(api,()=>1000);await worker.start();
+  const worker=createCoordinator(api,()=>1000);await worker.refresh();
   model.origins=[];api.tabs.sendMessage=async()=>({applied:true});
+  await worker.refresh();
   const status=await worker.handle({type:'status'},sender);
   assert.equal(status.pages[1].reason,'reload');
 });
@@ -78,40 +80,36 @@ test('Neue Dokumente bekommen nur vom eigenen Top-Level-Controller eine geprüft
   const worker=createCoordinator(api,()=>1000); await worker.start();
   const sender={id:'test-id',url:'https://reddit.com/',tab:{id:1},frameId:0};
   assert.equal((await worker.document({type:'document'},sender)).active,false);
-  model.origins=['http://*.reddit.com/*','https://*.reddit.com/*'];
+  model.origins=['http://*/*','https://*/*'];
+  await worker.refresh();
   assert.equal((await worker.document({type:'document'},sender)).active,true);
   await assert.rejects(worker.document({type:'document'},{...sender,frameId:1}));
   await assert.rejects(worker.document({type:'document'},{...sender,id:'other'}));
   await assert.rejects(worker.document({type:'document',active:true},sender));
 });
 
-test('Offene Tabs werden abgeglichen, Einzelfehler isoliert und vor Rechteentzug bereinigt', async () => {
+test('Offene Tabs werden abgeglichen, Einzelfehler isoliert und beim Moduswechsel entfärbt', async () => {
   const {api,model,sender}=browserDouble(defaultState());
   model.origins=['http://*/*','https://*/*'];
   model.tabs=[{id:1,url:'https://reddit.com/'},{id:2,url:'https://example.com/'},{id:3,url:'edge://extensions/'}];
   model.failTab=2;
-  const worker=createCoordinator(api,()=>1000); await worker.start();
+  const worker=createCoordinator(api,()=>1000); await worker.refresh();
   assert.equal(model.applications.some(a=>a.active && a.expectedUrl==='https://reddit.com/'),true);
   const status=await worker.handle({type:'status'},sender);
   assert.equal(status.pages[1].reason,'active');
   assert.equal(status.pages[2].reason,'reload');
   model.applications=[];
-  const remove=api.permissions.remove;
-  api.permissions.remove=async arg=>{
-    assert.equal(model.applications.some(a=>!a.active && a.expectedUrl==='https://reddit.com/'),true);
-    return remove(arg);
-  };
   await worker.handle({type:'mode',mode:'selected'},sender);
+  assert.equal(model.applications.some(a=>!a.active && a.expectedUrl==='https://reddit.com/'),true);
+  assert.deepEqual(model.origins,['http://*/*','https://*/*']);
   assert.equal(model.scripts.length,0);
 });
 
-test('Listen und Import bleiben atomar; globale Importe warten auf Freigabe und entfernte Regeln bauen Rechte ab', async () => {
+test('Listen und Import bleiben atomar und behalten den ausgeschalteten Zustand', async () => {
   const {api,model,sender}=browserDouble({...defaultState(),mode:'selected',enabled:false,pauseUntil:null});
   const worker=createCoordinator(api,()=>1000); await worker.start();
   const imported={formatVersion:1,mode:'global',colorExceptions:['color.de'],grayscaleSites:['reddit.com','old.reddit.com']};
   const before=structuredClone(model.db.state);
-  await assert.rejects(worker.handle({type:'import',text:JSON.stringify(imported)},sender));
-  assert.deepEqual(model.db.state,before);
   await assert.rejects(worker.handle({type:'import',text:'{"formatVersion":9}'},sender));
   assert.deepEqual(model.db.state,before);
   model.origins=['http://*/*','https://*/*'];
@@ -119,33 +117,11 @@ test('Listen und Import bleiben atomar; globale Importe warten auf Freigabe und 
   assert.equal(model.db.state.enabled,false);
   assert.deepEqual(model.db.state.grayscaleSites,['old.reddit.com','reddit.com']);
   await worker.handle({type:'mode',mode:'selected'},sender);
-  model.origins=['http://*.reddit.com/*','https://*.reddit.com/*'];
   await worker.handle({type:'remove',list:'grayscaleSites',domain:'reddit.com'},sender);
   assert.deepEqual(model.db.state.grayscaleSites,['old.reddit.com']);
-  assert.deepEqual(model.origins,[]);
+  assert.deepEqual(model.origins,['http://*/*','https://*/*']);
   await worker.handle({type:'add',list:'colorExceptions',domain:'NEW.de.'},sender);
   assert.deepEqual(model.db.state.colorExceptions,['color.de','new.de']);
-});
-
-test('Rechteabbau bleibt bei Fehler gesperrt und wird nach Worker-Abbruch fortgesetzt', async () => {
-  const initial={...defaultState(),colorExceptions:['color.de'],grayscaleSites:['reddit.com']};
-  const {api,model,sender}=browserDouble(initial);
-  model.origins=['http://*/*','https://*/*','https://*.reddit.com/*'];
-  const worker=createCoordinator(api,()=>1000); await worker.start();
-  model.failRemove=true;
-  await assert.rejects(worker.handle({type:'mode',mode:'selected'},sender));
-  assert.equal(model.scripts.length,0);
-  assert.equal(model.db.state.permissionTransition.mode,'selected');
-  await assert.rejects(worker.handle({type:'enabled',value:false},sender));
-  model.failRemove=false;
-  const restarted=createCoordinator(api,()=>1000); await restarted.start();
-  const status=await restarted.handle({type:'status'},sender);
-  assert.equal(status.state.mode,'selected');
-  assert.equal(status.state.permissionTransition,null);
-  assert.deepEqual(status.state.colorExceptions,['color.de']);
-  assert.deepEqual(status.state.grayscaleSites,['reddit.com']);
-  assert.deepEqual(model.origins,[]);
-  assert.equal(model.scripts.length,0);
 });
 
 test('Pause nutzt absolute Zeit, wird nach Neustart rekonstruiert und alte Alarme schalten nie ein', async () => {

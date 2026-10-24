@@ -1,3 +1,21 @@
+Local Grayscale 0.2.0 — 24. Oktober 2026
+
+- Ein gemeinsamer, einmalig angeforderter HTTP-/HTTPS-Zugriff für beide Modi.
+  Listen und Modus steuern den Filter, nicht mehr die Browserrechte.
+- Rechteverwaltung in den Einstellungen entfällt. Ein Hinweis zum Freigeben
+  erscheint nur bei fehlendem Zugriff. Bestehende UX-Aufräumarbeiten bleiben.
+- Alte Listen, Schalter, Pausen und JSON-Exporte bleiben kompatibel; auch das
+  Ziel einer unterbrochenen alten Rechtebereinigung wird übernommen.
+- Status und Dokumententscheidungen verwenden den geladenen Zustand ohne
+  wiederholte Browserabfragen. Tab-Ereignisse betreffen einzelne Tabs; bereits
+  abgeglichene Tabs werden beim Aktivieren nicht erneut injiziert.
+- Worker-Aufwachen ohne globale Tab-Suche bei unveränderter Registrierung.
+  Neue Registrierung und abgelaufene Pause gleichen bestehende Seiten ab.
+- Popup/Settings erhalten Änderungsnachrichten statt regelmäßigem Polling.
+- Schutz gegen schlafende Tabs, veraltete Aktivierungen und Rechteverlust bleibt.
+- Direkte Entwicklung aus extension/; optionale Paketierung, ZIP nur mit --zip.
+  Umfangreiche manuelle Abnahme ist keine Voraussetzung für persönliche Nutzung.
+
 Local Grayscale 0.1.1 — 24. Oktober 2026 — Prüfkandidat
 
 - Behoben: Eine wartende Injektion in einem eingefrorenen Tab blockierte die

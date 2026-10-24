@@ -10,19 +10,23 @@ if(!/^\d+\.\d+\.\d+$/.test(version)) throw new Error('Ungültige Paketversion.')
 const checks=spawnSync(process.execPath,['--test'],{stdio:'inherit',windowsHide:true});
 if(checks.status!==0) throw new Error('Tests fehlgeschlagen; kein Paket erstellt.');
 const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+Z$/,'Z');
-const name=`local-grayscale-${version}-candidate-${stamp}`;
+const name=`local-grayscale-${version}-${stamp}`;
 const base=join(root,'releases');await mkdir(base,{recursive:true});
 const destination=join(base,name);await mkdir(destination); // Never overwrite an existing snapshot.
-for(const path of ['extension','docs','README.md','CHANGELOG.txt']) await cp(join(root,path),join(destination,path),{recursive:true,errorOnExist:true,force:false});
+await mkdir(join(destination,'docs'));
+for(const path of ['extension','docs/INSTALLATION.md','docs/SICHERHEIT.md','docs/ENTWICKLUNG.md','docs/PRUEFPROTOKOLL.md','README.md','CHANGELOG.txt']) await cp(join(root,path),join(destination,path),{recursive:true,errorOnExist:true,force:false});
 const manifest=await createManifest(destination,version);
 await writeFile(join(destination,'release-manifest.txt'),manifest,{flag:'wx'});
 await writeFile(join(root,'release-manifest.txt'),manifest);
 await verifyPackage(destination);
-const zip=join(base,`${name}.zip`);
-const result=spawnSync('powershell.exe',['-NoProfile','-NonInteractive','-Command',
-  "$ErrorActionPreference='Stop'; Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::CreateFromDirectory($env:LG_PACKAGE_SOURCE, $env:LG_PACKAGE_ZIP)"],
-  {stdio:'inherit',windowsHide:true,env:{...process.env,LG_PACKAGE_SOURCE:destination,LG_PACKAGE_ZIP:zip}});
-if(result.status!==0) throw new Error('Archivierung fehlgeschlagen; unveränderte Paketdateien bleiben erhalten.');
-const digest=createHash('sha256').update(await readFile(zip)).digest('hex');
-await writeFile(`${zip}.sha256`,`${digest}  ${name}.zip\n`,{flag:'wx'});
-console.log(`Prüfkandidat: ${zip}\nArchiv-SHA-256: ${digest}\nKeine Installation und keine abschließende Freigabe.`);
+console.log(`Installierbar: ${join(destination,'extension')}`);
+if (process.argv.includes('--zip')) {
+  const zip=join(base,`${name}.zip`);
+  const result=spawnSync('powershell.exe',['-NoProfile','-NonInteractive','-Command',
+    "$ErrorActionPreference='Stop'; Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::CreateFromDirectory($env:LG_PACKAGE_SOURCE, $env:LG_PACKAGE_ZIP)"],
+    {stdio:'inherit',windowsHide:true,env:{...process.env,LG_PACKAGE_SOURCE:destination,LG_PACKAGE_ZIP:zip}});
+  if(result.status!==0) throw new Error('Archivierung fehlgeschlagen; unveränderte Paketdateien bleiben erhalten.');
+  const digest=createHash('sha256').update(await readFile(zip)).digest('hex');
+  await writeFile(`${zip}.sha256`,`${digest}  ${name}.zip\n`,{flag:'wx'});
+  console.log(`Archiv: ${zip}\nArchiv-SHA-256: ${digest}`);
+}

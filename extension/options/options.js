@@ -1,13 +1,13 @@
-import { command, requestFromClick, el, run, showError } from '../ui/api.js';
+import { command, requestFromClick, el, run, showError, watch } from '../ui/api.js';
 import { BROAD_HOSTS } from '../core/policy.js';
-import { matchesDomain, hostPatterns, normalizeDomain } from '../core/domains.js';
+import { matchesDomain, normalizeDomain } from '../core/domains.js';
 import { parseImport, exportSettings } from '../core/schema.js';
 
-let snapshot, preparedImport=null, grantOrigins=[];
+let snapshot, preparedImport=null;
 function modeHelp() {
   el('mode-help').textContent=el('mode').value==='global'
-    ? 'Benötigt Zugriff auf alle Websites. Ausnahmen bleiben farbig.'
-    : 'Beim Wechsel werden Freigaben zurückgesetzt. Ausgewählte Websites danach unter „Seitenzugriff“ freigeben.';
+    ? 'Alle Websites werden grau. Ausnahmen bleiben farbig.'
+    : 'Nur Websites auf dieser Liste werden grau.';
 }
 function listRows(list,id,state) {
   const container=el(id); container.replaceChildren();
@@ -18,15 +18,15 @@ function listRows(list,id,state) {
     const parent=state[list].find(other=>other!==domain && matchesDomain(domain,other));
     const notes=[];
     if (parent) notes.push(`Enthalten in ${parent}`);
-    if (list==='grayscaleSites' && state.mode==='selected') notes.push(snapshot.grants.sites.includes(domain)?'Zugriff erlaubt':'Zugriff fehlt');
     if (notes.length) { const meta=document.createElement('span'); meta.className='site-meta'; meta.textContent=notes.join(' · '); label.append(meta); }
     button.textContent='Entfernen'; button.setAttribute('aria-label',`${domain} entfernen`);
-    button.disabled=!!state.permissionTransition;
+
     button.addEventListener('click',()=>act(()=>command({type:'remove',list,domain})));
     row.append(label,button); li.append(row); container.append(li);
   }
 }
 function render(next) {
+  const previousMode=snapshot?.state?.mode;
   if (next) snapshot=next;
   if (!snapshot) return;
   const state=snapshot.state;
@@ -34,57 +34,31 @@ function render(next) {
   el('recover').disabled=!!state;
   el('color-section').hidden=state?.mode!=='global';
   el('gray-section').hidden=state?.mode!=='selected';
-  const accessDetails=el('access-details');
-  const showAccess=state?.mode==='selected' || !!state?.permissionTransition;
-  if (showAccess && (accessDetails.hidden || state.permissionTransition)) accessDetails.open=true;
-  if (!showAccess) accessDetails.open=false;
-  accessDetails.hidden=!showAccess;
+  el('setup').hidden=!state || snapshot.grants?.global;
+  el('grant').disabled=!state || snapshot.grants?.global;
   if (!state) {
     el('status').textContent=snapshot.error;
-    document.querySelectorAll('button,input,select').forEach(node=>{node.disabled=!['recover','refresh'].includes(node.id);});
+    document.querySelectorAll('button,input,select').forEach(node=>{node.disabled=!['recover'].includes(node.id);});
     return;
   }
-  el('status').textContent=state.permissionTransition ? 'Rechtebereinigung ausstehend. Filter ist deaktiviert; breiter Zugriff kann noch bestehen.' :
-    !state.enabled ? 'Graustufen aus' : state.pauseUntil ? `Pause bis ${new Date(state.pauseUntil).toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})}` : 'Graustufen an';
-  if (next) { el('mode').value=state.mode; modeHelp(); }
-  grantOrigins=state.mode==='global'?BROAD_HOSTS:state.grayscaleSites.flatMap(hostPatterns);
-  const missingAccess=state.mode==='global'?!snapshot.grants.global:state.grayscaleSites.some(domain=>!snapshot.grants.sites.includes(domain));
-  el('grant').textContent=state.mode==='global'?'Alle Websites freigeben':'Ausgewählte Websites freigeben';
-  el('grant').disabled=!grantOrigins.length || !missingAccess || !!state.permissionTransition;
-  el('grant').hidden=!grantOrigins.length || !missingAccess || !!state.permissionTransition;
-  el('repair').disabled=state.mode!=='selected' && !state.permissionTransition;
-  el('repair').hidden=state.mode!=='selected' && !state.permissionTransition;
-  el('access').textContent=snapshot.grants.global
-    ? 'Zugriff auf alle Websites erlaubt.'
-    : state.mode==='global' ? 'Zugriff fehlt. Gib Websites frei, um Graustufen anzuwenden.' : `${snapshot.grants.sites.length} von ${state.grayscaleSites.length} Websites freigegeben.`;
-  const origins=el('origins'); origins.replaceChildren();
-  for (const origin of snapshot.grants.origins.length?snapshot.grants.origins:['Keine optionalen Seitenfreigaben']) {
-    const li=document.createElement('li'); li.textContent=origin; origins.append(li);
-  }
+  el('status').textContent=!state.enabled ? 'Graustufen aus' : !snapshot.grants.global ? 'Zugriff fehlt' : state.pauseUntil ? `Pause bis ${new Date(state.pauseUntil).toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})}` : 'Graustufen an';
+  if (next && previousMode!==state.mode) { el('mode').value=state.mode; modeHelp(); }
   listRows('colorExceptions','color-list',state); listRows('grayscaleSites','gray-list',state);
-  el('gray-note').hidden=state.mode!=='selected' || !state.grayscaleSites.length;
   el('preview-area').hidden=!preparedImport;
   if (preparedImport) {
     el('preview').textContent=JSON.stringify(preparedImport,null,2);
-    const needsGrant=preparedImport.mode==='global' && !snapshot.grants.global;
-    el('import-help').textContent=needsGrant?'Zuerst Zugriff auf alle Websites erlauben, dann importieren.':'Ersetzt den Modus und beide Listen. Schalter und Pause bleiben erhalten.';
-    el('import-grant').hidden=!needsGrant;
-    el('import-apply').disabled=needsGrant || !!state.permissionTransition;
+    el('import-help').textContent='Ersetzt den Modus und beide Listen. Schalter und Pause bleiben erhalten.';
   }
-  if (state.permissionTransition) document.querySelectorAll('button,input,select').forEach(node=>{
-    if (!['repair','refresh','export','import-cancel'].includes(node.id)) node.disabled=true;
-  });
+
 }
 const act=operation=>run(operation,render);
 el('mode').addEventListener('change',modeHelp);
 el('apply-mode').addEventListener('click',()=>{
   const mode=el('mode').value;
-  act(()=>mode==='global'?requestFromClick(chrome,BROAD_HOSTS,()=>command({type:'mode',mode})):command({type:'mode',mode}));
+  act(()=>command({type:'mode',mode}));
 });
-el('grant').addEventListener('click',()=>act(()=>requestFromClick(chrome,grantOrigins,()=>command({type:'grants'}))));
-el('repair').addEventListener('click',()=>act(()=>command({type:'repair'})));
+el('grant').addEventListener('click',()=>act(()=>requestFromClick(chrome,BROAD_HOSTS,()=>command({type:'grants'}))));
 el('recover').addEventListener('click',()=>act(()=>command({type:'recover'})));
-el('refresh').addEventListener('click',()=>act(()=>command({type:'status'})));
 for (const [prefix,list] of [['color','colorExceptions'],['gray','grayscaleSites']]) {
   const add=()=>act(async()=>{
     const domain=normalizeDomain(el(`${prefix}-input`).value);
@@ -108,11 +82,11 @@ el('import-file').addEventListener('change',async()=>{
     preparedImport=parseImport(await file.text()); el('error').textContent='';
   } catch(error) {showError(error);} finally {render();}
 });
-el('import-grant').addEventListener('click',()=>act(()=>requestFromClick(chrome,BROAD_HOSTS,()=>command({type:'grants'}))));
 el('import-apply').addEventListener('click',()=>{
   if(!preparedImport) return;
   const text=JSON.stringify(preparedImport);
   act(async()=>{const result=await command({type:'import',text}); preparedImport=null; el('import-file').value=''; return result;});
 });
 el('import-cancel').addEventListener('click',()=>{preparedImport=null;el('import-file').value='';render();});
+watch(next=>{if(!snapshot || next.error!==snapshot.error || next.state?.revision!==snapshot.state?.revision) render(next);});
 modeHelp(); act(()=>command({type:'status'}));

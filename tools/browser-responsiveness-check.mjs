@@ -44,7 +44,8 @@ try {
   const fresh=await open('http://127.0.0.1:9341/fresh');
   const filtered=await cdp.evaluate(fresh,`new Promise(resolve=>{const end=Date.now()+2500;const check=()=>{const gray=getComputedStyle(document.documentElement).filter==='grayscale(1)';if(gray || Date.now()>end)resolve(gray);else setTimeout(check,20);};check();})`);
   assert.equal(filtered,true,'Neue Seite wird nicht grau.');
-  assert.equal(await cdp.evaluate(ready,`getComputedStyle(document.documentElement).filter`),'grayscale(1)');
+  const existing=await cdp.evaluate(ready,`new Promise(resolve=>{const end=Date.now()+3000;const check=()=>{const gray=getComputedStyle(document.documentElement).filter==='grayscale(1)';if(gray || Date.now()>end)resolve(gray);else setTimeout(check,20);};check();})`);
+  assert.equal(existing,true,'Vorhandene Seite wird nach asynchronem Abgleich grau.');
   report.checks.push('Vorhandene und neue Seite grau');
   const off=await cdp.evaluate(options,`chrome.runtime.sendMessage({type:'enabled',value:false})`);
   assert.equal(off.ok,true);
@@ -61,8 +62,32 @@ try {
   assert.equal((await cdp.evaluate(options,`chrome.runtime.sendMessage({type:'resume'})`)).ok,true);
   assert.equal(await cdp.evaluate(ready,`getComputedStyle(document.documentElement).filter`),'grayscale(1)');
   report.checks.push('Ausschalten, Einschalten, Pause und Fortsetzen im echten Browser');
+  // Exercise selected mode through the real options UI with the same broad grant.
+  const other=await open('http://localhost:9341/other');
+  await cdp.evaluate(options,`document.querySelector('#mode').value='selected';document.querySelector('#apply-mode').click()`,true);
+  await cdp.evaluate(options,`new Promise(resolve=>{const check=()=>document.querySelector('#apply-mode').disabled?setTimeout(check,20):resolve();check();})`);
+  await cdp.evaluate(options,`document.querySelector('#gray-input').value='127.0.0.1';document.querySelector('#gray-add').click()`,true);
+  await cdp.evaluate(options,`new Promise(resolve=>{const check=()=>document.querySelector('#gray-add').disabled?setTimeout(check,20):resolve();check();})`);
+  assert.equal(await cdp.evaluate(ready,`getComputedStyle(document.documentElement).filter`),'grayscale(1)');
+  assert.equal(await cdp.evaluate(other,`getComputedStyle(document.documentElement).filter`),'none');
+  const ui=await cdp.evaluate(options,`({error:document.querySelector('#error').textContent,setup:document.querySelector('#setup').hidden,access:!!document.querySelector('#access-details'),colorHidden:document.querySelector('#color-section').hidden,grayHidden:document.querySelector('#gray-section').hidden})`);
+  assert.deepEqual(ui,{error:'',setup:true,access:false,colorHidden:true,grayHidden:false});
+  await cdp.evaluate(options,`document.querySelector('#gray-list button').click()`,true);
+  await cdp.evaluate(options,`new Promise(resolve=>{const check=()=>document.querySelector('#gray-add').disabled?setTimeout(check,20):resolve();check();})`);
+  assert.equal(await cdp.evaluate(ready,`getComputedStyle(document.documentElement).filter`),'none');
+  assert.equal(await cdp.evaluate(options,`chrome.permissions.contains({origins:['http://*/*','https://*/*']})`),true);
+  report.checks.push('Ausgewählte Liste filtert nur passende Hosts; Entfernen behält Vollzugriff; aufgeräumte Settings ohne Rechteblock');
+  // The popup listens for worker notifications even while a different UI acts.
+  const popup=await open(`chrome-extension://${extensionId}/popup/popup.html`);
+  await cdp.evaluate(popup,`new Promise(resolve=>{const check=()=>document.querySelector('#enabled').disabled?setTimeout(check,20):resolve();check();})`);
+  await cdp.evaluate(options,`chrome.runtime.sendMessage({type:'enabled',value:false})`);
+  assert.equal(await cdp.evaluate(popup,`new Promise(resolve=>{const end=Date.now()+2000;const check=()=>{const off=!document.querySelector('#enabled').checked;if(off || Date.now()>end)resolve(off);else setTimeout(check,20);};check();})`),true);
+  await cdp.evaluate(popup,`globalThis.statusReads=0;const send=chrome.runtime.sendMessage.bind(chrome.runtime);chrome.runtime.sendMessage=(message,...rest)=>{if(message?.type==='status')statusReads++;return send(message,...rest);};`);
+  await new Promise(resolve=>setTimeout(resolve,700));
+  assert.equal(await cdp.evaluate(popup,`statusReads`),0);
+  report.checks.push('Popup übernimmt Änderung aus anderem Fenster per Nachricht; im Ruhezustand keine Statusabfragen');
   console.log(JSON.stringify(report,null,2));
-} catch(error) {report.errors.push(error.message);console.error(error.message);process.exitCode=1;}
+} catch(error) {report.errors.push(error.stack);console.error(error.stack);process.exitCode=1;}
 finally {
   await writeFile(`.test-artifacts/responsiveness-${port}-${frozen?'frozen':stalled?'stalled':'ready'}.json`,JSON.stringify(report,null,2));
   for(const targetId of targets) await cdp.send('Target.closeTarget',{targetId}).catch(()=>{});

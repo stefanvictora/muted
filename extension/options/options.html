@@ -14,8 +14,13 @@
   <p id="error" role="alert"></p>
   <section id="recovery" class="card" hidden>
     <h2>Einstellungen zurücksetzen</h2>
-    <p>Die gespeicherten Einstellungen sind beschädigt. Zurücksetzen löscht beide Listen, schaltet den Filter aus und entfernt Seitenfreigaben. Betroffene Seiten danach neu laden.</p>
+    <p>Die gespeicherten Einstellungen sind beschädigt. Zurücksetzen löscht beide Listen, schaltet den Filter aus und behält die Browserfreigabe. Betroffene Seiten danach neu laden.</p>
     <button id="recover">Zurücksetzen</button>
+  </section>
+  <section id="setup" class="card setup-card" hidden>
+    <h2>Zugriff erlauben</h2>
+    <p class="small muted">Beide Modi benötigen Zugriff auf alle Websites. Deine Regeln bestimmen, welche grau werden.</p>
+    <button id="grant" class="primary">Zugriff erlauben</button>
   </section>
   <section class="card">
     <h2>Graustufen anwenden</h2>
@@ -36,17 +41,7 @@
     <div class="input-row"><input id="gray-input" type="text" placeholder="z. B. reddit.com" maxlength="300" spellcheck="false" autocapitalize="none" aria-describedby="gray-hint"><button id="gray-add">Hinzufügen</button></div>
     <p id="gray-hint" class="field-hint">Gilt auch für Subdomains.</p>
     <ul id="gray-list" class="site-list" aria-label="Graue Websites"></ul>
-    <p id="gray-note" class="small muted" hidden>Entfernen setzt Seitenfreigaben zurück. Verbleibende Websites danach erneut freigeben.</p>
   </section>
-  <details id="access-details" class="card disclosure" hidden>
-    <summary>Seitenzugriff</summary>
-    <div class="disclosure-body">
-      <p id="access" class="small"></p>
-      <div class="row"><button id="grant">Zugriff erlauben</button><button id="repair">Freigaben zurücksetzen</button><button id="refresh">Aktualisieren</button></div>
-      <details class="access-origins"><summary>Freigegebene Adressen</summary><ul id="origins"></ul></details>
-      <p class="small muted">Ausschalten, Pausieren und Farbausnahmen ändern keine Browserrechte. Nach dem Zurücksetzen müssen Websites erneut freigegeben werden.</p>
-    </div>
-  </details>
   <details class="card disclosure">
     <summary>Import &amp; Export</summary>
     <div class="disclosure-body">
@@ -55,7 +50,7 @@
       <div class="file-field"><label for="import-file">JSON importieren <span class="muted">· max. 64 KB</span></label><input id="import-file" type="file" accept="application/json,.json"></div>
       <div id="preview-area" hidden>
         <h2>Importvorschau</h2><pre id="preview"></pre><p id="import-help" class="small"></p>
-        <div class="row"><button id="import-apply" class="primary">Importieren</button><button id="import-grant" hidden>Zugriff auf alle Websites erlauben</button><button id="import-cancel">Abbrechen</button></div>
+        <div class="row"><button id="import-apply" class="primary">Importieren</button><button id="import-cancel">Abbrechen</button></div>
       </div>
     </div>
   </details>

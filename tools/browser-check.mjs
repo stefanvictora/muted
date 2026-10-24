@@ -22,13 +22,13 @@ try {
     if(event.sessionId===session && event.method==='Runtime.exceptionThrown') report.errors.push(event.params.exceptionDetails.text);
     if(event.sessionId===session && event.method==='Network.requestWillBeSent' && /^https?:/.test(event.params.request.url)) external.push(event.params.request.url);
   });
-  await cdp.evaluate(session,`new Promise(resolve=>{const check=()=>document.querySelector('#access')?.textContent ? resolve(true):setTimeout(check,25);check();})`);
+  await cdp.evaluate(session,`new Promise(resolve=>{const check=()=>document.querySelector('#status')?.textContent ? resolve(true):setTimeout(check,25);check();})`);
   const status=await cdp.evaluate(session,`chrome.runtime.sendMessage({type:'status'})`);
   assert.equal(status.ok,true); assert.equal(status.value.state.mode,'global'); assert.equal(status.value.grants.global,false);
   report.checks.push('Manifest/Worker/Options laden; keine Hosts ohne Freigabe');
   const before=await cdp.evaluate(session,`chrome.scripting.getRegisteredContentScripts()`);
   assert.equal(before.length,0);
-  const ui=await cdp.evaluate(session,`({error:document.querySelector('#error').textContent,access:document.querySelector('#access').textContent,overflow:document.documentElement.scrollWidth>innerWidth})`);
+  const ui=await cdp.evaluate(session,`({error:document.querySelector('#error').textContent,access:document.querySelector('#status').textContent,overflow:document.documentElement.scrollWidth>innerWidth})`);
   assert.equal(ui.error,''); assert.equal(ui.overflow,false);
   report.checks.push('Options initialisiert ohne Laufzeitfehler und horizontalen Überlauf');
   // Exercise real UI controls, including user activation, without touching normal browser profiles.

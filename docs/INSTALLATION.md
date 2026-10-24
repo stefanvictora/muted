@@ -1,49 +1,42 @@
-# Installation, Update und Rollback
+# Installation und Bedienung
 
-## Status und Trennung der Ordner
+## Laden und aktualisieren
 
-Version 0.1.1 ist ein Prüfkandidat. Vor einer persönlichen Freigabe die offenen Punkte im [Prüfprotokoll](PRUEFPROTOKOLL.md) in beiden Browsern abschließen. Version 0.1.0 kann bei schlafenden Tabs hängen und soll nicht weiter abgenommen werden.
+1. In Edge `edge://extensions`, in Chrome `chrome://extensions` öffnen und den Entwicklermodus einschalten.
+2. „Entpackte Erweiterung laden“ wählen und `<repository-root>\extension` auswählen. Bei einem Sicherungspaket dessen Unterordner `extension` verwenden.
+3. Andere Kopien deaktivieren, Symbol anheften und im Popup einmal „Zugriff erlauben“ klicken.
 
-Arbeitsquellcode: `<repository-root>`.
-Prüfpakete: `<repository-root>\releases`.
-Vorgesehene spätere Installation: `<installation-folder>`.
+Ist dieser Ordner bereits geladen, genügt nach Änderungen „Neu laden“ in der Erweiterungsverwaltung.
+Offene Popups/Einstellungen neu öffnen und bei Bedarf Websites neu laden, damit ältere Seitenskripte
+ersetzt werden. Lokale Dateiänderungen können bereits beim erneuten Öffnen der Oberfläche wirksam sein.
+Edge und Chrome speichern Einstellungen unabhängig voneinander.
 
-Der Installationsordner wurde nicht angelegt oder verändert. Es gibt keine automatische Installation, keinen Watcher, keinen automatischen Pull und keinen Build in diesem Ordner. Die automatisierten Browserprüfungen verwenden ausschließlich getrennte Profile unter `.test-artifacts/`.
+## Bedienung
 
-## Prüfen und lokal laden
+- **Alle Websites mit Ausnahmen:** Die Liste „Farbig lassen“ enthält die Ausnahmen.
+- **Nur ausgewählte Websites:** Die Liste „Grau schalten“ enthält die zu filternden Websites.
+- Die jeweils andere Liste bleibt gespeichert. Beide Modi verwenden denselben Vollzugriff.
+- Der Hauptschalter bleibt gespeichert. Ausschalten beendet eine laufende Pause.
+- Eine neue Pause ersetzt die bisherige Frist durch jetzt plus 5, 15 oder 30 Minuten.
+  „Pause beenden“ stellt den normalen Betrieb sofort wieder her.
+- Domains umfassen Subdomains. IP-Adressen und localhost gelten exakt.
+- Import/Export überträgt Modus und Listen. Schalter, Pause und Browserfreigabe werden nicht importiert.
+  Ein Import hat eine Vorschau und wird erst mit „Importieren“ übernommen.
 
-1. ZIP in einen neuen Prüf-/Freigabeordner entpacken. Die Hashliste im Paket mit dem geprüften Original vergleichen. Mit `node tools/verify.mjs <entpackter-Paketordner>` können sämtliche Runtime-Dateien und zusätzliche Dateien geprüft werden. Node ist dafür ein Entwicklungswerkzeug; der Browser benötigt es nicht.
-2. Für die Abnahme das enthaltene `extension`-Verzeichnis als entpackte Erweiterung laden. Erst nach abgeschlossener Freigabe dessen Inhalt bewusst in den stabilen Installationsordner kopieren. Direkt darin muss `manifest.json` liegen.
-3. Edge: `edge://extensions`, Entwicklermodus einschalten, „Entpackte Erweiterung laden“, Ordner auswählen. Chrome: dasselbe unter `chrome://extensions`.
-4. Symbol anheften, Popup öffnen. Andere Graustufen-Erweiterungen für die Abnahme deaktivieren, damit sich Filter nicht überlagern.
-5. Zunächst ist „Einrichtung: Seitenzugriff fehlt“ zu erwarten. „Seitenzugriff bewusst freigeben“ fordert HTTP-/HTTPS-Zugriff an. Ablehnen bleibt möglich.
-6. Alternativ in den Einstellungen zu „Nur ausgewählte Websites grau“ wechseln, Hostnamen eintragen und danach „Ausgewählte Websites freigeben“ klicken. Gespeicherte Regeln ohne Freigabe filtern nicht.
+## Bestehende Einstellungen
 
-Eine Domain umfasst ihre Subdomains; `docs.google.com` wird niemals automatisch zu `google.com`. IP-Adressen und `localhost` gelten exakt. Bei einer übergeordneten Regel zeigt das Popup deren Namen und verweist für feinere Auswahl auf die Einstellungen.
+Beim Update von 0.1.x bleiben Listen, Hauptschalter und Pausen erhalten. Auch alte JSON-Exporte sind
+weiter verwendbar. Wer bisher nur einzelne Websites freigegeben hatte, muss einmal den gemeinsamen
+Zugriff erlauben. Eine bereits bestehende globale Freigabe wird weiterverwendet.
 
-## Bedienung und Fehlerbehebung
+## Falls etwas nicht stimmt
 
-Der Hauptschalter bleibt nach Neustarts erhalten. Ausschalten löscht die Pause. Wiederholtes Pausieren startet die gewählte Dauer ab jetzt. Die absolute Endzeit bleibt bei Standby/Browserneustart gültig; eine verstellte Systemuhr ändert die verbleibende Zeit.
+Bei fehlendem Zugriff erscheint der Freigabeknopf. Browserrechte lassen sich weiterhin in der
+Erweiterungsverwaltung entziehen. Bei einem Neuladehinweis die betroffene Website neu laden.
+Beschädigte Einstellungen können ausdrücklich zurückgesetzt werden; das löscht beide Listen und
+schaltet den Filter aus, behält aber die Browserfreigabe.
 
-Beim Wechsel von global zu ausgewählt werden die Registrierung und vorhandene Filter bereinigt, anschließend optionale Hostrechte zurückgegeben. Die Listen bleiben erhalten. Verbleibende Regeln müssen danach ausdrücklich erneut freigegeben werden. Auch das Entfernen einer aktiven ausgewählten Regel bereinigt sämtliche Hostfreigaben, um überlappende Rechte sicher zu behandeln.
-
-Bei „Rechtebereinigung ausstehend“: Einstellungen öffnen, tatsächliche Freigaben prüfen, „Seitenrechte bereinigen“ klicken. Der Übergang blockiert widersprechende Änderungen. Bei fehlgeschlagener Anwendung/Bereinigung betroffene Seiten neu laden. Bereits erzeugte isolierte Kontexte können bis zur Navigation existieren.
-
-Bei beschädigtem oder unbekanntem Zustand gibt es keine neue Filterung und kein automatisches Zurücksetzen. Die Einstellungen bieten eine ausdrücklich beschriftete Reset-Aktion an. Sie löscht die Listen, schaltet aus, wählt den ausgewählten Modus und bereinigt Hostrechte. Vorher bei Bedarf den gespeicherten Zustand über Browser-DevTools sichern. Nach Reset betroffene Seiten neu laden. Bei fehlender API-Unterstützung zuerst den Browser aktualisieren.
-
-## Import und Export
-
-Export vor Änderungen als lokale Sicherung speichern. Importdatei wählen, Vorschau kontrollieren und vollständig übernehmen. Modus und beide Listen werden ersetzt; Hauptschalter und Pause bleiben unverändert. Ein globaler Import ohne Zugriff wartet in der Vorschau auf einen gesonderten Freigabeklick. Browserrechte kommen nie aus der Datei. Das Schließen der Einstellungsseite verwirft eine noch nicht übernommene Vorschau.
-
-## Kontrolliertes Update
-
-1. Änderungen, Abnahme und neue Hashliste prüfen; alte Dateien unverändert sichern und Einstellungen in jedem Browser exportieren.
-2. Erweiterung in beiden Browsern deaktivieren.
-3. Den installierten Dateisatz bewusst vollständig durch den geprüften neuen Satz ersetzen. Keine Altdateien stehen lassen; Pfad beibehalten.
-4. In beiden Browsern neu laden/aktivieren. ID, Schema, Rechte und Einstellungen prüfen. Betroffene Tabs neu laden, damit alte Seitenkontexte verschwinden.
-
-Eine bearbeitete lokale Datei kann bereits beim nächsten Öffnen einer Extension-Seite wirksam werden. Entscheidend ist die kontrollierte Dateiübernahme, nicht allein „Neu laden“.
-
-## Rollback
-
-Beide Installationen deaktivieren, gesicherten Dateisatz am gleichen Pfad wiederherstellen, Schemakompatibilität prüfen und gegebenenfalls den vorherigen Export importieren. Anschließend Erweiterungen und betroffene Tabs neu laden. Ein unbekanntes neueres Schema wird nicht still überschrieben. Vor Deinstallation exportieren; lokale Einstellungen können sonst verloren gehen.
+Vor größeren Änderungen genügt eine Kopie des funktionierenden Extension-Ordners und optional ein
+JSON-Export. Für den Rückweg die alte Kopie am gleichen geladenen Pfad wiederherstellen und die
+Erweiterung sowie betroffene Websites neu laden. Vor einer Deinstallation Einstellungen exportieren.
+Eine manuelle Hashprüfung oder vollständige Browser-Abnahme ist für die persönliche Nutzung keine Pflicht.

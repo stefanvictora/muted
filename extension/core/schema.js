@@ -16,7 +16,7 @@ export function settings(value) {
 }
 
 export function defaultState() {
-  return { schemaVersion: 1, revision: 0, enabled: true, mode: 'global', colorExceptions: [], grayscaleSites: [], pauseUntil: null, permissionTransition: null };
+  return { schemaVersion: 1, revision: 0, enabled: true, mode: 'global', colorExceptions: [], grayscaleSites: [], pauseUntil: null };
 }
 
 export function validateState(value) {
@@ -25,14 +25,15 @@ export function validateState(value) {
     !(value.pauseUntil === null || (Number.isSafeInteger(value.pauseUntil) && value.pauseUntil >= 0)) ||
     !(value.revision === undefined || (Number.isSafeInteger(value.revision) && value.revision >= 0)))
     throw new Error('Unbekanntes oder beschädigtes Zustandsschema.');
-  let transition = null;
+  // Migrate the intended settings of an interrupted 0.1.x permissions change.
+  let desired = settings(value);
   if (value.permissionTransition != null) {
     exactKeys(value.permissionTransition, ['mode', 'colorExceptions', 'grayscaleSites']);
-    transition = settings(value.permissionTransition);
-    if (transition.mode !== 'selected') throw new Error('Ungültige Rechtebereinigung.');
+    desired = settings(value.permissionTransition);
+    if (desired.mode !== 'selected') throw new Error('Ungültige Rechtebereinigung.');
   }
   return { schemaVersion: 1, revision: value.revision ?? 0, enabled: value.enabled,
-    ...settings(value), pauseUntil: value.pauseUntil, permissionTransition: transition };
+    ...desired, pauseUntil: value.pauseUntil };
 }
 
 export function parseImport(text) {

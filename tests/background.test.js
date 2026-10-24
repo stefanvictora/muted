@@ -15,6 +15,45 @@ test('Worker registriert Nachrichten synchron und beantwortet erst nach sicherer
   assert.equal(denied.ok,false);
 });
 
+test('Schließen eines fehlerhaften Tabs entfernt auch den veralteten Warn-Badge', async () => {
+  const {api,model}=browserDouble(defaultState());
+  model.origins=['http://*/*','https://*/*'];model.tabs=[{id:1,url:'https://gone.example/'}];model.failTab=1;
+  const worker=installBackground(api);await worker.start();
+  assert.equal(model.badge,'!');
+  api.tabs.onRemoved.emit(1);
+  for(let i=0;i<10;i++)await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(model.badge,'ON');
+});
+
+test('Tab-Ereignisse behandeln nur den betroffenen Tab und schreiben keine Einstellungen', async () => {
+  const {api,model,sender}=browserDouble(defaultState());
+  model.origins=['http://*/*','https://*/*'];
+  model.tabs=[{id:1,url:'https://sleeping.example/',frozen:true},{id:2,url:'https://other.example/'}];
+  const worker=installBackground(api);await worker.refresh();
+  const touched=[],otherCalls=[];
+  const execute=api.scripting.executeScript;
+  api.scripting.executeScript=spec=>{touched.push(spec.target.tabId);return execute(spec);};
+  for(const [object,method] of [[api.tabs,'query'],[api.storage.local,'set'],[api.permissions,'contains'],[api.scripting,'updateContentScripts']]) {
+    const original=object[method];object[method]=(...args)=>{otherCalls.push(method);return original(...args);};
+  }
+  model.tabs[0].frozen=false;
+  api.tabs.onActivated.emit({tabId:1,windowId:1});
+  for(let i=0;i<40;i++) await new Promise(resolve=>setImmediate(resolve));
+  assert.ok(touched.length>0);
+  assert.ok(touched.every(id=>id===1));
+  assert.deepEqual(otherCalls,[]);
+  assert.equal((await worker.handle({type:'status'},sender)).pages[2].applied,true);
+  touched.length=0;
+  api.tabs.onActivated.emit({tabId:1,windowId:1});
+  for(let i=0;i<20;i++) await new Promise(resolve=>setImmediate(resolve));
+  assert.deepEqual(touched,[], 'Ein bereits abgeglichener Tab braucht beim Wechsel keine erneute Injektion');
+  api.tabs.onRemoved.emit(1);
+  for(let i=0;i<10;i++) await new Promise(resolve=>setImmediate(resolve));
+  assert.deepEqual(touched,[]);
+  assert.deepEqual(otherCalls,[]);
+  assert.equal((await worker.handle({type:'status'},sender)).pages[1],undefined);
+});
+
 test('Schlafende Tabs werden nicht geweckt; beim Aktivieren erfolgt ein neuer Filterabgleich', async () => {
   const {api,model}=browserDouble(defaultState());
   model.origins=['http://*/*','https://*/*'];model.tabs=[{id:1,url:'https://sleeping.example/',frozen:true}];

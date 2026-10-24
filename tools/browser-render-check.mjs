@@ -15,7 +15,7 @@ try {
   const optionsTarget=await cdp.send('Target.createTarget',{url:`chrome-extension://${extension.id}/options/options.html`});
   const popup=await cdp.attach(optionsTarget.targetId);
   await new Promise(resolve=>setTimeout(resolve,300));
-  await cdp.evaluate(popup,`new Promise(resolve=>{const check=()=>document.querySelector('#access')?.textContent?resolve(true):setTimeout(check,25);check();})`);
+  await cdp.evaluate(popup,`new Promise(resolve=>{const check=()=>document.querySelector('#status')?.textContent?resolve(true):setTimeout(check,25);check();})`);
   const url=`http://localhost:9340/?test=${name}-${Date.now()}`;
   const {targetId}=await cdp.send('Target.createTarget',{url});
   const page=await cdp.attach(targetId);
@@ -28,7 +28,7 @@ try {
   await cdp.send('Extensions.triggerAction',{id:extension.id,targetId:tabTarget.targetId});
   const tabId=await cdp.evaluate(popup,`chrome.tabs.query({}).then(t=>t.find(t=>t.url===${JSON.stringify(url)}).id)`);
   const status=await cdp.evaluate(popup,`chrome.runtime.sendMessage({type:'status'})`);
-  assert.equal(status.value.pages[tabId].reason,'permission');
+  assert.equal(status.value.pages[tabId].reason,'setup');
   report.checks.push('Action gewährt temporären Testzugriff; activeTab wird nicht als Dauerfreigabe verwendet');
   const original=await cdp.evaluate(page,`getComputedStyle(document.documentElement).filter`);
   await cdp.evaluate(popup,`(async()=>{const target={tabId:${tabId},frameIds:[0]};await chrome.scripting.insertCSS({target,files:['content/filter.css'],origin:'AUTHOR'});await chrome.scripting.executeScript({target,files:['content/controller.js']});await chrome.scripting.executeScript({target,files:['content/controller.js']});return chrome.scripting.executeScript({target,func:()=>globalThis.__localGrayscaleV1.set({active:true,expectedUrl:location.href,revision:99999})});})()`);

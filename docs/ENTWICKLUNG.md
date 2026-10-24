@@ -1,38 +1,63 @@
 # Entwicklung
 
-## Modulgrenzen
+## Aufbau
 
-`core/` enthält pure Domain-, Schema-, Nachrichten- und Policy-Funktionen. `services/coordinator.js` ist die zentrale serialisierte Schreibinstanz. Browserzugriffe sind in State-, Permissions-, Pause- und Filter-Diensten gebündelt. `background.js` registriert Ereignislistener synchron und delegiert an den Coordinator. Die UI fordert Rechte unmittelbar im Klickhandler an und sendet danach typisierte Befehle; der Worker prüft die tatsächlichen Grants erneut.
+`core/` enthält Domainregeln, Zustandsschema, Nachrichtenvalidierung und die Filterentscheidung.
+`services/coordinator.js` besitzt den geladenen Zustand und serialisiert Änderungen. Der Tab-Abgleich
+läuft außerhalb dieser Warteschlange, damit ein schlafender Tab weder Popup noch neue Seiten blockiert.
+`background.js` verbindet Browserereignisse mit dem Coordinator; `content/` wendet den Filter an.
+Popup und Settings teilen sich kleine Helfer in `ui/`. Es gibt kein Framework und keinen Buildschritt.
 
-Seit 0.1.1 wartet der Abgleich vorhandener Tabs außerhalb der Zustandswarteschlange. Ein gemeinsamer Verarbeitungslauf übernimmt jeweils den neuesten angeforderten Stand. Popup-Status und Dokument-Handshakes bleiben dadurch während wartender Renderer-Operationen erreichbar. Ergebnisse werden nur für die aktuelle Revision veröffentlicht. Pro Tab gilt eine Deadline von einer Sekunde; die Timer begrenzen API-Wartezeiten, sie steuern keine Pause. Bereits versandte Browseroperationen sind nicht abbrechbar: Nach einer Deadline werden keine weiteren Schritte dieses Vorgangs gestartet. Ein schon versandter Aktivierungsaufruf holt beim tatsächlichen Ausführen eine neue Worker-Entscheidung ein. Schlafende/entladene Tabs werden übersprungen und beim Aktivieren bzw. Aufwachen erneut abgeglichen.
+## Wann Arbeit anfällt
 
-`content/controller.js` ist eine idempotente klassische IIFE in der isolierten Welt. `content/start.js` fragt den Worker vor der ersten Aktivierung nach dem aktuellen Sollzustand. Dadurch kann auch ein zuvor registriertes Skript keine alte Einstellung eigenständig reaktivieren. Dynamische Registrierungen starten bei `document_start`, sind nicht über Browsersitzungen persistent und werden bei jedem Worker-Start erneut abgeglichen. Die zusätzliche Abfrage kann einen kurzen Farbblitz verursachen.
+| Anlass | Arbeit |
+|---|---|
+| Worker wird geweckt | Zustand und Vollzugriff einmal lesen; Alarm und Registrierung abgleichen |
+| Registrierung unverändert | Keine erneute Registrierung und keine globale Tab-Suche |
+| Registrierung neu/geändert oder Pause inzwischen abgelaufen | Bestehende Tabs abgleichen |
+| Status / neues Dokument | Geladenen Zustand auswerten; abgelaufene Pause bei Bedarf nachholen |
+| Tab lädt oder wacht auf | Nur diesen Tab abgleichen |
+| Bekannter Tab wird aktiviert | Keine erneute Injektion bei bereits bestätigtem Zustand |
+| Tab wird geschlossen | Flüchtigen Status entfernen |
+| Einstellungen / Pause / Rechte ändern sich | Registrierung und offene Tabs abgleichen |
+| Abgleich ist abgeschlossen | Offene Oberflächen benachrichtigen; kein regelmäßiges Polling |
 
-Ein aktiver Controller setzt genau eine eigene Root-Klasse. CSS ist an diese Klasse gebunden. Beim Deaktivieren werden Beobachter zuerst gestoppt; imperative CSS-Kopien werden mit denselben Dateien und derselben Herkunft entfernt. Ein fehlgeschlagenes oder veraltetes Ergebnis wird nicht als bestätigter Erfolg dargestellt.
+Die globale Freigabe wird beim Worker-Start, bei Berechtigungsereignissen und nach einem expliziten
+Freigabeklick geprüft. Einzelne Domainfreigaben werden nicht mehr verwaltet. Ein Feld aus alten
+Rechteübergängen wird ausschließlich beim Lesen alter Einstellungen in die gewünschten Listen und
+den Modus überführt; die neue Runtime erzeugt solche Übergänge nicht mehr.
 
-Die Revision wird auch beim Abgleich erhöht: Browser-Rechteänderungen können außerhalb gespeicherter UI-Einstellungen entstehen. Diese Speicherung sperrt verspätete Content-Antworten auch nach Worker-Neustarts aus.
+Revisionen schützen vor verspäteten Antworten, auch über Worker-Neustarts hinweg. Tab-Operationen
+haben eine Deadline und werden in Gruppen von höchstens vier ausgeführt. Bereits versandte
+Aktivierungen prüfen beim tatsächlichen Ausführen nochmals den aktuellen Zustand. Bekannte
+schlafende/entladene Tabs werden übersprungen. Rechteverlust oder nicht bestätigtes Entfernen
+können einen Neuladehinweis auslösen.
 
-## TDD-Nachweis
+## Prüfen
 
-Die Testgrenzen stammen aus dem übergebenen Plan: öffentliche reine Logik, öffentliche Worker-Befehle/Ereignisse mit Doubles nur für Browser und Uhr sowie Controller-Verhalten an einer minimalen DOM-Grenze.
+`npm test` führt die Verhaltenstests mit Node aus. Geprüft werden reine Logik, öffentliche
+Worker-Befehle und Browserereignisse mit einem Browser-Doppel sowie der Controller an der DOM-Grenze.
+Bei geändertem Verhalten zuerst einen passenden fehlschlagenden Test ergänzen. Bestehende Regressionen
+behalten; Erwartungen an bewusst entfernte Rechteverwaltung wurden auf das neue Modell umgestellt.
 
-Die Umsetzung erfolgte in Rot-Grün-Schritten: Domainnamen → Hostvalidierung → Importschema → Policy/Registrierung → Initialisierung und Schalter → Absenderprüfung → Pause → wiederanlaufender Rechteabbau → Listen/Import → bestehende Tabs → Controller/Frühstart → Dokument-Handshake → fehlerhaftes Schema → Worker-Ereignisse → unmittelbare Freigabeaktion → Paketgrenzen. Die jeweiligen Tests wurden vor Implementierung ausgeführt und scheiterten zunächst. Spätere Regressionen ergänzen Rechteverlust, Bestätigung der Bereinigung und eigene Optionsseiten als Browser-Tabs.
+Browserchecks nur bei passenden Änderungen, immer mit getrenntem Testprofil und lokalem Debug-Port:
 
-Das Browser-Doppel ersetzt ausschließlich `chrome.*`; interne Runtime-Module werden nicht gemockt. DOM-Tests ersetzen die Browser-DOM-Grenze. Reale Browserchecks ergänzen diese Tests und haben einen Fehler in der anfänglich zu strengen Senderprüfung aufgedeckt; dafür wurde zuerst ein reproduzierender Regressionstest angelegt.
+- `node tools/browser-check.mjs <Port> <Name>`: Options-UI, echter Dateiimport und Export.
+- `node tools/browser-render-check.mjs <Port> <Name>`: Controller/CSS mit temporärem activeTab-Zugriff.
+- `node tools/browser-responsiveness-check.mjs <Port> --frozen`: schlafender Tab, Schalter/Pause,
+  ausgewählter Modus mit Vollzugriff und UI-Benachrichtigungen.
 
-```powershell
-node --test
-node tools/icons.mjs       # Nur bei bewusster Neugenerierung der lokalen Icons
-node tools/package.mjs    # Neuer Kandidat; keine Installation
-node tools/verify.mjs <Paketordner>
-```
+Die ersten beiden nutzen die Extension aus `extension/`. Der letzte nutzt eine getrennte Testkopie
+mit festen Hostrechten und ersetzt keinen nativen Zustimmungsdialog. Die Browser benötigen für diese
+DevTools-Prüfungen `--enable-unsafe-extension-debugging`; nur eigens gestartete Testprofile verwenden
+und nachher schließen. Ergebnisse liegen in `.test-artifacts/`.
 
-## Reale Browserchecks reproduzieren
+Nach einer Änderung genügt eine kurze manuelle Kontrolle des betroffenen Ablaufs. Keine wiederholte
+Vollabnahme beider Browser; Sonderfälle gezielt bei passenden Änderungen oder Fehlern prüfen.
 
-`tools/browser-check.mjs <Port> <Name>` prüft Laden, UI, Import/Export und Requests des Options-Kontexts. `tools/browser-render-check.mjs <Port> <Name>` prüft echte isolierte Injektion und CSS über temporären `activeTab`-Zugriff. Beide Werkzeuge verwenden nur lokale Browser-/Testserver-Verbindungen. Sie gehören nicht in die Runtime.
+## Optionale Pakete
 
-Nur ein **separates, leeres Testprofil** mit lokalem Debug-Port verwenden. Die Browserchecks deinstallieren und laden ausschließlich die aus dem aktuellen `extension`-Ordner stammende Testextension neu; Testeinstellungen werden dabei verworfen. Niemals einen Debug-Port eines normalen Benutzerprofils übergeben. Die dokumentierte DevTools-Erweiterungsschnittstelle benötigt den Teststartschalter `--enable-unsafe-extension-debugging`. Diese Einstellung gilt nur für den eigens gestarteten Testprozess und ist keine Runtime-Anforderung. Testbrowser danach schließen.
-
-Die UI-Prüfungen ohne sichtbares Fenster ersetzen keine Abnahme nativer Berechtigungsdialoge. Der Render-Test nutzt temporären Testzugriff und beweist nicht den vollständigen automatischen Betrieb mit dauerhaften Grants. Vollständige manuelle Matrix siehe Prüfprotokoll.
-
-`node tools/browser-responsiveness-check.mjs <Port> --frozen` reproduziert die Blockade aus 0.1.0 und prüft die Korrektur in 0.1.1. Es erzeugt ausschließlich unter `.test-artifacts/responsiveness-fixture/` eine Testkopie mit festen Hostrechten. Damit wird der automatische Runtime-Pfad ohne nativen Freigabedialog geprüft. Diese geänderte Testkopie wird niemals paketiert oder in einem persönlichen Profil installiert. Ein lokaler Tab wird per DevTools eingefroren; Statusantwort, neue/bestehende Seiten, Ausschalten, Aufwachen und Pause werden geprüft. Ohne Flag läuft der Vergleich mit normalen Tabs, mit `--stalled` mit einer langsam ladenden Ressource. Die Produktions-Runtime behält ausschließlich optionale Hosts.
+`npm run package` führt Tests aus und erstellt einen neuen versionierten Ordner mit der Runtime,
+kurzen Anleitungen und automatisch geprüfter Hashliste. `--zip` erzeugt zusätzlich ein Archiv.
+Es erfolgt keine Installation. `node tools/verify.mjs <Paketordner>` bleibt als optionales
+Vergleichswerkzeug verfügbar. Historische Prüfprotokolle werden nicht in neue Pakete kopiert.

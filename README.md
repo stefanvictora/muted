@@ -1,28 +1,34 @@
 # Local Grayscale
 
-Persönliche, lokale Manifest-V3-Erweiterung für Microsoft Edge und Google Chrome. Deutsche Oberfläche, zwei getrennte Domain-Listen, Hauptschalter, globale Pause für 5/15/30 Minuten sowie lokaler JSON-Import und -Export. Keine Laufzeitabhängigkeiten, keine Fremdupdates, keine Netzwerkfunktionen.
+Persönliche lokale Graustufen-Erweiterung für Edge und Chrome, Version 0.2.0.
+Keine Laufzeitabhängigkeiten, Netzwerkfunktionen oder automatischen Fremdupdates.
 
-**Version 0.1.1 – Prüfkandidat, noch keine abschließende Freigabe.** Behebt eine in der manuellen Edge-Abnahme gefundene Blockade durch schlafende Tabs. 27 automatisierte Tests bestehen. Die native Zustimmung muss mit dieser Version erneut geprüft werden; weitere manuelle Browserprüfungen sind offen: [Prüfprotokoll](docs/PRUEFPROTOKOLL.md).
+- Alle Websites mit Farbausnahmen oder nur ausgewählte Websites.
+- Hauptschalter und Pause für 5, 15 oder 30 Minuten.
+- Getrennte Domainlisten mit Subdomains sowie lokaler JSON-Import/-Export.
+- Einmaliger Zugriff auf alle HTTP-/HTTPS-Websites für beide Modi. Die Listen bestimmen, wo der Filter aktiv ist; sie begrenzen nicht die Browserrechte.
 
-## Einstieg
+## Benutzen und aktualisieren
 
-- [Installation, Updates und Rückweg](docs/INSTALLATION.md)
-- [Berechtigungen und Sicherheitsgrenzen](docs/SICHERHEIT.md)
-- [Architektur und Entwicklung](docs/ENTWICKLUNG.md)
-- [Prüfprotokoll mit manueller Abnahmematrix](docs/PRUEFPROTOKOLL.md)
-- [Vollständiger übergebener Plan](docs/ANFORDERUNGEN.txt)
+Den Ordner `extension` als entpackte Erweiterung laden. Bei Änderungen in der
+Erweiterungsverwaltung „Neu laden“ und bei Bedarf betroffene Seiten neu laden.
+Dafür ist keine neue Paketierung oder Versionsnummer pro Versuch nötig.
+Andere geladene Kopien deaktivieren.
 
-Nur `extension/` ist installierbar. Entwicklung und Paketierung ändern niemals den vorgesehenen Installationsordner. Edge und Chrome speichern ihre Einstellungen unabhängig voneinander.
+[Installation und Bedienung](docs/INSTALLATION.md) · [Berechtigungen und Grenzen](docs/SICHERHEIT.md)
 
-## Entwicklung
+## Entwickeln
 
-Node.js wird ausschließlich für Tests und Paketvorbereitung benötigt; keine Installation von npm-Paketen.
+Node.js wird nur für Tests und optionale Sicherungspakete benötigt. Keine npm-Abhängigkeiten.
 
 ```powershell
-node --test
-node tools/package.mjs
+npm test
+npm run package             # Optionaler versionierter Ordner unter releases/
+npm run package -- --zip    # Zusätzlich ZIP und Prüfsumme
 ```
 
-Der zweite Befehl erzeugt einen neuen, versionierten Kandidaten unter `releases/`, eine ZIP-Datei und SHA-256-Listen. Er installiert nichts. Eine neue Paketierung überschreibt keinen bestehenden Kandidaten.
+Pakete überschreiben weder ältere Pakete noch die aktive Installation. Für persönliche Nutzung
+reicht nach Änderungen ein kurzer Check des betroffenen Ablaufs; eine vollständige manuelle
+Abnahmematrix ist nicht erforderlich.
 
-Startzustand: „Alles grau, außer …“, eingeschaltet, beide Listen leer, **ohne Seitenfreigabe**. Erst der bewusste Freigabeklick in der Oberfläche kann Hostrechte hinzufügen.
+[Entwicklung](docs/ENTWICKLUNG.md) · [Aktueller Prüfstand](docs/PRUEFPROTOKOLL.md)
