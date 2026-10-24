@@ -82,3 +82,7 @@ Translations live in `extension/_locales/en/messages.json` and
 - [Permissions and limitations](docs/SECURITY.md)
 - [Development notes](docs/DEVELOPMENT.md)
 - [Verification record](docs/VERIFICATION.md)
+
+## License
+
+[MIT](LICENSE) © 2026 Stefan Victora.

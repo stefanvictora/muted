@@ -551,7 +551,7 @@ Planned local separation:
 
   Working source:    dedicated development folder
   Release archives:  versioned, unchanged snapshots outside the runtime
-  Installation:      a stable folder, e.g. <installation-folder>
+  Installation:      a stable folder chosen by the user, <installation-folder>
 
 The installation folder contains only the approved extension directory. This is
 a proposed future path, not a folder created by the plan. Both browsers may load

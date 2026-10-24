@@ -1,2 +1,24 @@
-.test-artifacts/
-releases/
+# Local test profiles, reports, and release snapshots
+/.test-artifacts/
+/releases/
+
+# Editor and local agent settings
+/.idea/
+/.vscode/
+/.codex/
+
+# Dependencies, logs, and operating-system files
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
