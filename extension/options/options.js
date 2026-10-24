@@ -32,6 +32,8 @@ function render(next) {
   const state=snapshot.state;
   el('recovery').hidden=!!state;
   el('recover').disabled=!!state;
+  el('color-section').hidden=state?.mode!=='global';
+  el('gray-section').hidden=state?.mode!=='selected';
   if (!state) {
     el('status').textContent=snapshot.error;
     document.querySelectorAll('button,input,select').forEach(node=>{node.disabled=!['recover','refresh'].includes(node.id);});
@@ -40,16 +42,14 @@ function render(next) {
   el('status').textContent=state.permissionTransition ? 'Rechtebereinigung ausstehend. Filter ist deaktiviert; breiter Zugriff kann noch bestehen.' :
     !state.enabled ? 'Graustufen aus' : state.pauseUntil ? `Pause bis ${new Date(state.pauseUntil).toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})}` : 'Graustufen an';
   if (next) { el('mode').value=state.mode; modeHelp(); }
-  for (const [id,mode] of [['color-active','global'],['gray-active','selected']]) {
-    el(id).textContent=state.mode===mode?'Aktiv':'In diesem Modus inaktiv';
-    el(id).dataset.active=String(state.mode===mode);
-  }
   grantOrigins=state.mode==='global'?BROAD_HOSTS:state.grayscaleSites.flatMap(hostPatterns);
   const missingAccess=state.mode==='global'?!snapshot.grants.global:state.grayscaleSites.some(domain=>!snapshot.grants.sites.includes(domain));
   if (next && (missingAccess || state.permissionTransition)) el('access-details').open=true;
   el('grant').textContent=state.mode==='global'?'Alle Websites freigeben':'Ausgewählte Websites freigeben';
   el('grant').disabled=!grantOrigins.length || !missingAccess || !!state.permissionTransition;
+  el('grant').hidden=!grantOrigins.length || !missingAccess || !!state.permissionTransition;
   el('repair').disabled=state.mode!=='selected' && !state.permissionTransition;
+  el('repair').hidden=state.mode!=='selected' && !state.permissionTransition;
   el('access').textContent=snapshot.grants.global
     ? 'Zugriff auf alle Websites erlaubt.'
     : state.mode==='global' ? 'Zugriff fehlt. Gib Websites frei, um Graustufen anzuwenden.' : `${snapshot.grants.sites.length} von ${state.grayscaleSites.length} Websites freigegeben.`;

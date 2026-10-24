@@ -11,20 +11,23 @@
 <main>
   <header class="brand"><span class="mark" aria-hidden="true"></span><h1>Local Grayscale</h1></header>
   <p id="error" role="alert"></p>
-  <div class="toggle-row"><label for="enabled">Graustufen</label><input id="enabled" class="switch" type="checkbox" role="switch" disabled></div>
-  <section class="card site-card" aria-label="Aktuelle Website">
+  <p id="attention" class="small muted" role="status"></p>
+  <div id="enabled-control" class="toggle-row" hidden><label for="enabled">Graustufen</label><input id="enabled" class="switch" type="checkbox" role="switch" disabled></div>
+  <section id="setup" class="card setup-card" aria-labelledby="setup-heading" hidden>
+    <h2 id="setup-heading">Graustufen für alle Websites</h2>
+    <button id="grant" class="primary wide" disabled>Aktivieren</button>
+  </section>
+  <section id="site-card" class="card site-card" aria-label="Aktuelle Website" hidden>
     <p id="host" class="host">Website wird geprüft …</p>
     <p id="status" class="status" aria-live="polite">Bitte warten</p>
     <p id="until" class="small muted"></p>
-    <button id="site" class="wide" disabled>Website-Regel</button>
-    <p id="scope" class="small muted">Inklusive Subdomains</p>
-    <p id="site-note" class="small muted"></p>
+    <div id="site-controls">
+      <button id="site" class="wide" disabled>Website-Regel</button>
+      <p id="scope" class="small muted">Inklusive Subdomains</p>
+      <p id="site-note" class="small muted"></p>
+    </div>
   </section>
-  <section id="setup" class="notice" hidden>
-    <p>Zugriff auf alle Websites erforderlich.</p>
-    <button id="grant" class="primary wide">Zugriff erlauben</button>
-  </section>
-  <section class="pause-section" aria-labelledby="pause-heading">
+  <section id="pause-controls" class="pause-section" aria-labelledby="pause-heading" hidden>
     <h2 id="pause-heading">Pausieren</h2>
     <div class="pause-buttons"><button data-minutes="5">5 Min.</button><button data-minutes="15">15 Min.</button><button data-minutes="30">30 Min.</button></div>
     <button id="resume" class="wide" hidden>Pause beenden</button>

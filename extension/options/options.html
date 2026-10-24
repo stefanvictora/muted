@@ -23,15 +23,15 @@
     <div class="mode-row"><select id="mode" aria-describedby="mode-help"><option value="global">Alle Websites mit Ausnahmen</option><option value="selected">Nur ausgewählte Websites</option></select><button id="apply-mode" class="primary">Übernehmen</button></div>
     <p id="mode-help" class="small muted"></p>
   </section>
-  <section class="card">
-    <div class="section-heading"><h2>Farbig lassen</h2><span id="color-active" class="tag"></span></div>
+  <section id="color-section" class="card" hidden>
+    <h2>Farbig lassen</h2>
     <label class="sr-only" for="color-input">Website farbig lassen</label>
     <div class="input-row"><input id="color-input" type="text" placeholder="z. B. maps.google.com" maxlength="300" spellcheck="false" autocapitalize="none" aria-describedby="color-hint"><button id="color-add">Hinzufügen</button></div>
     <p id="color-hint" class="field-hint">Gilt auch für Subdomains.</p>
     <ul id="color-list" class="site-list" aria-label="Farbige Websites"></ul>
   </section>
-  <section class="card">
-    <div class="section-heading"><h2>Grau schalten</h2><span id="gray-active" class="tag"></span></div>
+  <section id="gray-section" class="card" hidden>
+    <h2>Grau schalten</h2>
     <label class="sr-only" for="gray-input">Website grau schalten</label>
     <div class="input-row"><input id="gray-input" type="text" placeholder="z. B. reddit.com" maxlength="300" spellcheck="false" autocapitalize="none" aria-describedby="gray-hint"><button id="gray-add">Hinzufügen</button></div>
     <p id="gray-hint" class="field-hint">Gilt auch für Subdomains.</p>
