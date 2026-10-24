@@ -1,39 +1,63 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Muted</title>
-  <link rel="stylesheet" href="../ui/style.css">
-  <script type="module" src="popup.js"></script>
-</head>
-<body class="popup">
-<main>
-  <header class="brand"><span class="mark" aria-hidden="true"></span><h1>Muted</h1></header>
-  <p id="error" role="alert"></p>
-  <p id="attention" class="small muted" role="status"></p>
-  <div id="enabled-control" class="toggle-row" hidden><label for="enabled" data-i18n="grayscale">Grayscale</label><input id="enabled" class="switch" type="checkbox" role="switch" disabled></div>
-  <section id="setup" class="card setup-card" aria-labelledby="setup-heading" hidden>
-    <h2 id="setup-heading" data-i18n="grant_access">Allow access</h2>
-    <p class="small muted" data-i18n="popup_setup">Allow access once for both modes. Your rules determine which websites turn gray.</p>
-    <button id="grant" class="primary wide" disabled data-i18n="grant_access">Allow access</button>
-  </section>
-  <section id="site-card" class="card site-card" aria-label="Current website" data-i18n-aria-label="current_website" hidden>
-    <p id="host" class="host" data-i18n="checking_website">Checking website …</p>
-    <p id="status" class="status" aria-live="polite" data-i18n="please_wait">Please wait</p>
-    <p id="until" class="small muted"></p>
-    <div id="site-controls">
-      <button id="site" class="wide" disabled data-i18n="website_rule">Website rule</button>
-      <p id="scope" class="small muted" data-i18n="includes_subdomains">Includes subdomains</p>
-      <p id="site-note" class="small muted"></p>
-    </div>
-  </section>
-  <section id="pause-controls" class="pause-section" aria-labelledby="pause-heading" hidden>
-    <h2 id="pause-heading" data-i18n="pause">Pause</h2>
-    <div class="pause-buttons"><button data-minutes="5" data-i18n="minutes_5">5 min</button><button data-minutes="15" data-i18n="minutes_15">15 min</button><button data-minutes="30" data-i18n="minutes_30">30 min</button></div>
-    <button id="resume" class="wide" hidden data-i18n="resume">End pause</button>
-  </section>
-  <nav class="popup-actions" aria-label="More actions" data-i18n-aria-label="more_actions"><button id="options" class="quiet"><span data-i18n="settings">Settings</span> <span aria-hidden="true">↗</span></button><button id="refresh" class="quiet" data-i18n="refresh">Refresh</button></nav>
-</main>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Muted</title>
+    <link rel="stylesheet" href="../ui/style.css" />
+    <script type="module" src="popup.js"></script>
+  </head>
+  <body class="popup">
+    <main>
+      <header class="brand">
+        <span class="mark" aria-hidden="true"></span>
+        <h1>Muted</h1>
+      </header>
+      <p id="error" role="alert"></p>
+      <p id="attention" class="small muted" role="status"></p>
+      <div id="enabled-control" class="toggle-row" hidden>
+        <label for="enabled" data-i18n="grayscale">Grayscale</label
+        ><input id="enabled" class="switch" type="checkbox" role="switch" disabled />
+      </div>
+      <section id="setup" class="card setup-card" aria-labelledby="setup-heading" hidden>
+        <h2 id="setup-heading" data-i18n="grant_access">Allow access</h2>
+        <p class="small muted" data-i18n="popup_setup">
+          Allow access once for both modes. Your rules determine which websites turn gray.
+        </p>
+        <button id="grant" class="primary wide" disabled data-i18n="grant_access">
+          Allow access
+        </button>
+      </section>
+      <section
+        id="site-card"
+        class="card site-card"
+        aria-label="Current website"
+        data-i18n-aria-label="current_website"
+        hidden
+      >
+        <p id="host" class="host" data-i18n="checking_website">Checking website …</p>
+        <p id="status" class="status" aria-live="polite" data-i18n="please_wait">Please wait</p>
+        <p id="until" class="small muted"></p>
+        <div id="site-controls">
+          <button id="site" class="wide" disabled data-i18n="website_rule">Website rule</button>
+          <p id="scope" class="small muted" data-i18n="includes_subdomains">Includes subdomains</p>
+          <p id="site-note" class="small muted"></p>
+        </div>
+      </section>
+      <section id="pause-controls" class="pause-section" aria-labelledby="pause-heading" hidden>
+        <h2 id="pause-heading" data-i18n="pause">Pause</h2>
+        <div class="pause-buttons">
+          <button data-minutes="5" data-i18n="minutes_5">5 min</button
+          ><button data-minutes="15" data-i18n="minutes_15">15 min</button
+          ><button data-minutes="30" data-i18n="minutes_30">30 min</button>
+        </div>
+        <button id="resume" class="wide" hidden data-i18n="resume">End pause</button>
+      </section>
+      <nav class="popup-actions" aria-label="More actions" data-i18n-aria-label="more_actions">
+        <button id="options" class="quiet">
+          <span data-i18n="settings">Settings</span> <span aria-hidden="true">↗</span></button
+        ><button id="refresh" class="quiet" data-i18n="refresh">Refresh</button>
+      </nav>
+    </main>
+  </body>
 </html>

@@ -12,9 +12,28 @@ test('Domainregeln kanonisieren Namen und treffen nur echte Subdomains', () => {
 });
 
 test('Hostregeln lehnen URLs und ungültige DNS-Namen ab; IPs und localhost sind exakt', () => {
-  for (const invalid of ['', 'https://example.com', 'example.com/a', 'a:80', 'u@host',
-    '*.example.com', 'a?b', 'a#b', 'a\\b', 'a..b', '-a.de', 'a_.de', 'a-.de',
-    'a'.repeat(64) + '.de', Array(5).fill('a'.repeat(60)).join('.'), '<b>', 'a b', '%61.de', '127.1', '0x7f000001']) {
+  for (const invalid of [
+    '',
+    'https://example.com',
+    'example.com/a',
+    'a:80',
+    'u@host',
+    '*.example.com',
+    'a?b',
+    'a#b',
+    'a\\b',
+    'a..b',
+    '-a.de',
+    'a_.de',
+    'a-.de',
+    'a'.repeat(64) + '.de',
+    Array(5).fill('a'.repeat(60)).join('.'),
+    '<b>',
+    'a b',
+    '%61.de',
+    '127.1',
+    '0x7f000001',
+  ]) {
     assert.throws(() => normalizeDomain(invalid), undefined, invalid);
   }
   assert.equal(normalizeDomain('[2001:0db8::1]'), '[2001:db8::1]');

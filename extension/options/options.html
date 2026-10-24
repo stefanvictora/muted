@@ -1,59 +1,126 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title data-i18n="options_title">Muted · Settings</title>
-  <link rel="stylesheet" href="../ui/style.css">
-  <script type="module" src="options.js"></script>
-</head>
-<body class="options">
-<main>
-  <header class="brand"><span class="mark" aria-hidden="true"></span><span>Muted</span></header>
-  <div class="page-heading"><h1 data-i18n="settings">Settings</h1><p id="status" class="small muted" role="status"></p></div>
-  <p id="error" role="alert"></p>
-  <section id="recovery" class="card" hidden>
-    <h2 data-i18n="reset_settings">Reset settings</h2>
-    <p data-i18n="recovery_help">The saved settings are corrupted. Resetting clears both lists, turns the filter off, and keeps browser access. Reload affected pages afterward.</p>
-    <button id="recover" data-i18n="reset">Reset</button>
-  </section>
-  <section id="setup" class="card setup-card" hidden>
-    <h2 data-i18n="grant_access">Allow access</h2>
-    <p class="small muted" data-i18n="options_setup">Both modes need access to all websites. Your rules determine which ones turn gray.</p>
-    <button id="grant" class="primary" data-i18n="grant_access">Allow access</button>
-  </section>
-  <section class="card">
-    <h2 data-i18n="apply_grayscale">Apply grayscale</h2>
-    <label class="sr-only" for="mode" data-i18n="select_websites">Select websites</label>
-    <div class="mode-row"><select id="mode" aria-describedby="mode-help"><option value="global" data-i18n="mode_global">All websites with exceptions</option><option value="selected" data-i18n="mode_selected">Selected websites only</option></select><button id="apply-mode" class="primary" data-i18n="apply">Apply</button></div>
-    <p id="mode-help" class="small muted"></p>
-  </section>
-  <section id="color-section" class="card" hidden>
-    <h2 data-i18n="keep_color">Keep in color</h2>
-    <label class="sr-only" for="color-input" data-i18n="keep_website_color">Keep website in color</label>
-    <div class="input-row"><input id="color-input" type="text" placeholder="e.g. maps.google.com" data-i18n-placeholder="example_color" maxlength="300" spellcheck="false" autocapitalize="none" aria-describedby="color-hint"><button id="color-add" data-i18n="add">Add</button></div>
-    <p id="color-hint" class="field-hint" data-i18n="subdomain_hint">Also applies to subdomains.</p>
-    <ul id="color-list" class="site-list" aria-label="Websites in color" data-i18n-aria-label="color_websites"></ul>
-  </section>
-  <section id="gray-section" class="card" hidden>
-    <h2 data-i18n="make_gray">Make gray</h2>
-    <label class="sr-only" for="gray-input" data-i18n="make_website_gray">Make website gray</label>
-    <div class="input-row"><input id="gray-input" type="text" placeholder="e.g. reddit.com" data-i18n-placeholder="example_gray" maxlength="300" spellcheck="false" autocapitalize="none" aria-describedby="gray-hint"><button id="gray-add" data-i18n="add">Add</button></div>
-    <p id="gray-hint" class="field-hint" data-i18n="subdomain_hint">Also applies to subdomains.</p>
-    <ul id="gray-list" class="site-list" aria-label="Grayscale websites" data-i18n-aria-label="gray_websites"></ul>
-  </section>
-  <details class="card disclosure">
-    <summary data-i18n="import_export">Import &amp; export</summary>
-    <div class="disclosure-body">
-      <p class="small muted" data-i18n="export_help">Saves the mode and both lists. Importing replaces these settings.</p>
-      <button id="export" data-i18n="export_json">Export as JSON</button>
-      <div class="file-field"><label for="import-file"><span data-i18n="import_json">Import JSON</span> <span class="muted" data-i18n="file_limit">· max. 64 KB</span></label><input id="import-file" type="file" accept="application/json,.json"></div>
-      <div id="preview-area" hidden>
-        <h2 data-i18n="import_preview">Import preview</h2><pre id="preview"></pre><p id="import-help" class="small"></p>
-        <div class="row"><button id="import-apply" class="primary" data-i18n="import_apply">Import</button><button id="import-cancel" data-i18n="cancel">Cancel</button></div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title data-i18n="options_title">Muted · Settings</title>
+    <link rel="stylesheet" href="../ui/style.css" />
+    <script type="module" src="options.js"></script>
+  </head>
+  <body class="options">
+    <main>
+      <header class="brand"><span class="mark" aria-hidden="true"></span><span>Muted</span></header>
+      <div class="page-heading">
+        <h1 data-i18n="settings">Settings</h1>
+        <p id="status" class="small muted" role="status"></p>
       </div>
-    </div>
-  </details>
-</main>
-</body>
+      <p id="error" role="alert"></p>
+      <section id="recovery" class="card" hidden>
+        <h2 data-i18n="reset_settings">Reset settings</h2>
+        <p data-i18n="recovery_help">
+          The saved settings are corrupted. Resetting clears both lists, turns the filter off, and
+          keeps browser access. Reload affected pages afterward.
+        </p>
+        <button id="recover" data-i18n="reset">Reset</button>
+      </section>
+      <section id="setup" class="card setup-card" hidden>
+        <h2 data-i18n="grant_access">Allow access</h2>
+        <p class="small muted" data-i18n="options_setup">
+          Both modes need access to all websites. Your rules determine which ones turn gray.
+        </p>
+        <button id="grant" class="primary" data-i18n="grant_access">Allow access</button>
+      </section>
+      <section class="card">
+        <h2 data-i18n="apply_grayscale">Apply grayscale</h2>
+        <label class="sr-only" for="mode" data-i18n="select_websites">Select websites</label>
+        <div class="mode-row">
+          <select id="mode" aria-describedby="mode-help">
+            <option value="global" data-i18n="mode_global">All websites with exceptions</option>
+            <option value="selected" data-i18n="mode_selected">
+              Selected websites only
+            </option></select
+          ><button id="apply-mode" class="primary" data-i18n="apply">Apply</button>
+        </div>
+        <p id="mode-help" class="small muted"></p>
+      </section>
+      <section id="color-section" class="card" hidden>
+        <h2 data-i18n="keep_color">Keep in color</h2>
+        <label class="sr-only" for="color-input" data-i18n="keep_website_color"
+          >Keep website in color</label
+        >
+        <div class="input-row">
+          <input
+            id="color-input"
+            type="text"
+            placeholder="e.g. maps.google.com"
+            data-i18n-placeholder="example_color"
+            maxlength="300"
+            spellcheck="false"
+            autocapitalize="none"
+            aria-describedby="color-hint"
+          /><button id="color-add" data-i18n="add">Add</button>
+        </div>
+        <p id="color-hint" class="field-hint" data-i18n="subdomain_hint">
+          Also applies to subdomains.
+        </p>
+        <ul
+          id="color-list"
+          class="site-list"
+          aria-label="Websites in color"
+          data-i18n-aria-label="color_websites"
+        ></ul>
+      </section>
+      <section id="gray-section" class="card" hidden>
+        <h2 data-i18n="make_gray">Make gray</h2>
+        <label class="sr-only" for="gray-input" data-i18n="make_website_gray"
+          >Make website gray</label
+        >
+        <div class="input-row">
+          <input
+            id="gray-input"
+            type="text"
+            placeholder="e.g. reddit.com"
+            data-i18n-placeholder="example_gray"
+            maxlength="300"
+            spellcheck="false"
+            autocapitalize="none"
+            aria-describedby="gray-hint"
+          /><button id="gray-add" data-i18n="add">Add</button>
+        </div>
+        <p id="gray-hint" class="field-hint" data-i18n="subdomain_hint">
+          Also applies to subdomains.
+        </p>
+        <ul
+          id="gray-list"
+          class="site-list"
+          aria-label="Grayscale websites"
+          data-i18n-aria-label="gray_websites"
+        ></ul>
+      </section>
+      <details class="card disclosure">
+        <summary data-i18n="import_export">Import &amp; export</summary>
+        <div class="disclosure-body">
+          <p class="small muted" data-i18n="export_help">
+            Saves the mode and both lists. Importing replaces these settings.
+          </p>
+          <button id="export" data-i18n="export_json">Export as JSON</button>
+          <div class="file-field">
+            <label for="import-file"
+              ><span data-i18n="import_json">Import JSON</span>
+              <span class="muted" data-i18n="file_limit">· max. 64 KB</span></label
+            ><input id="import-file" type="file" accept="application/json,.json" />
+          </div>
+          <div id="preview-area" hidden>
+            <h2 data-i18n="import_preview">Import preview</h2>
+            <pre id="preview"></pre>
+            <p id="import-help" class="small"></p>
+            <div class="row">
+              <button id="import-apply" class="primary" data-i18n="import_apply">Import</button
+              ><button id="import-cancel" data-i18n="cancel">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </details>
+    </main>
+  </body>
 </html>

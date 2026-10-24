@@ -62,9 +62,14 @@ There is no need to rebuild or repackage the extension for each change.
 
 ## Development
 
-Node.js is only required for tests and optional packaging. There are no npm dependencies to install.
+Use Node.js 22.12 or newer for development. Oxfmt is a development-only dependency;
+the extension itself still needs no build step or runtime dependencies.
 
 ```powershell
+npm ci                      # Install the pinned development tools
+npm run format              # Format JavaScript, JSON, HTML, and CSS
+npm run format:check        # Check formatting without changing files
+npm run check               # Check formatting and run all tests
 npm test
 npm run package             # Create a versioned folder under releases/
 npm run package -- --zip    # Also create a ZIP archive and checksum (Windows PowerShell)
@@ -72,6 +77,7 @@ npm run package -- --zip    # Also create a ZIP archive and checksum (Windows Po
 
 Packaging runs the tests and verifies the runtime files against a generated SHA-256 manifest.
 It creates a new snapshot without overwriting older packages or changing your active installation.
+After formatting runtime files, packaging also refreshes the checked-in hash manifest.
 
 Translations live in `extension/_locales/en/messages.json` and
 `extension/_locales/de/messages.json`. Add new messages to both catalogs.

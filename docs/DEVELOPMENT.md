@@ -43,7 +43,22 @@ have a deadline and run in groups of at most four. Activations already sent to a
 the current state when they actually run. Known sleeping/discarded tabs are skipped.
 Permission loss or unconfirmed filter removal can trigger a reload message.
 
-## Verification
+## Formatting and verification
+
+Use Node.js 22.12 or newer and run `npm ci` to install the development tools from
+`package-lock.json`. Oxfmt is pinned as a development-only dependency and is not included
+in the installable extension.
+
+- `npm run format` formats code in `extension/`, `tests/`, and `tools/`, plus `package.json`
+  and `.oxfmtrc.json`.
+- `npm run format:check` checks the same files without changing them.
+- `npm run check` checks formatting and then runs the behavior tests.
+
+The configuration uses two spaces, single quotes in JavaScript, semicolons, a 100-character
+print width, and LF line endings. It does not sort imports or package fields. Generated test
+artifacts, release snapshots, and historical evidence reports are excluded.
+After formatting runtime files, `npm run package` refreshes `release-manifest.txt` as part
+of creating a new verified package.
 
 `npm test` runs behavior tests with Node. Coverage includes pure logic, public worker commands,
 browser events using an API double, and the controller at the DOM boundary.
