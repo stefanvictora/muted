@@ -8,6 +8,11 @@ läuft außerhalb dieser Warteschlange, damit ein schlafender Tab weder Popup no
 `background.js` verbindet Browserereignisse mit dem Coordinator; `content/` wendet den Filter an.
 Popup und Settings teilen sich kleine Helfer in `ui/`. Es gibt kein Framework und keinen Buildschritt.
 
+Der Produktname ist Muted. Die internen Kennungen `local-grayscale`,
+`local-grayscale-pause`, `local-grayscale-v1-active` und `__localGrayscaleV1`
+bleiben für bestehende Script-Registrierungen, Pausen und bereits injizierte
+Controller stabil. Neue Exporte heißen `muted.json`, neue Pakete `muted-…`.
+
 ## Wann Arbeit anfällt
 
 | Anlass | Arbeit |

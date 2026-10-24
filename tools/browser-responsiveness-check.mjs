@@ -12,7 +12,7 @@ const frozen=process.argv.includes('--frozen');
 const fixture=resolve('.test-artifacts/responsiveness-fixture/extension');
 await mkdir(fixture,{recursive:true});await cp('extension',fixture,{recursive:true});
 const manifest=JSON.parse(await readFile(resolve(fixture,'manifest.json'),'utf8'));
-manifest.name='Local Grayscale – Diagnosefixture';
+manifest.name='Muted – Diagnosefixture';
 manifest.host_permissions=['http://*/*','https://*/*'];
 await writeFile(resolve(fixture,'manifest.json'),JSON.stringify(manifest));
 const server=createServer((req,res)=>{

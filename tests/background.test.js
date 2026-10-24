@@ -27,7 +27,7 @@ test('Tab-Fehler bleiben im Seitenstatus und überschreiben weder Icon noch Tool
     const status=await worker.handle(command,sender);
     assert.equal(status.pages[1].reason,'reload');
     assert.equal(model.badge,badge);
-    assert.equal(model.title,`Local Grayscale · ${title}`);
+    assert.equal(model.title,`Muted · ${title}`);
   }
   api.tabs.onRemoved.emit(1);
   for(let i=0;i<10;i++)await new Promise(resolve=>setImmediate(resolve));

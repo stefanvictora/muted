@@ -10,7 +10,7 @@ if(!/^\d+\.\d+\.\d+$/.test(version)) throw new Error('Ungültige Paketversion.')
 const checks=spawnSync(process.execPath,['--test'],{stdio:'inherit',windowsHide:true});
 if(checks.status!==0) throw new Error('Tests fehlgeschlagen; kein Paket erstellt.');
 const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+Z$/,'Z');
-const name=`local-grayscale-${version}-${stamp}`;
+const name=`muted-${version}-${stamp}`;
 const base=join(root,'releases');await mkdir(base,{recursive:true});
 const destination=join(base,name);await mkdir(destination); // Never overwrite an existing snapshot.
 await mkdir(join(destination,'docs'));

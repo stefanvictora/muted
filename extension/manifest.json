@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Local Grayscale",
+  "name": "Muted",
   "description": "Lokale Graustufen mit Domain-Regeln und zeitlich begrenzter Pause.",
   "version": "0.2.0",
   "minimum_chrome_version": "102",
@@ -9,7 +9,7 @@
   "incognito": "not_allowed",
   "icons": {"16":"assets/icon-16.png","32":"assets/icon-32.png","48":"assets/icon-48.png","128":"assets/icon-128.png"},
   "background": {"service_worker": "background.js", "type": "module"},
-  "action": {"default_popup": "popup/popup.html", "default_title": "Local Grayscale", "default_icon":{"16":"assets/icon-16.png","32":"assets/icon-32.png"}},
+  "action": {"default_popup": "popup/popup.html", "default_title": "Muted", "default_icon":{"16":"assets/icon-16.png","32":"assets/icon-32.png"}},
   "options_ui": {"page": "options/options.html", "open_in_tab": true},
   "content_security_policy": {"extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'"}
 }

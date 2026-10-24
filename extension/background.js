@@ -5,7 +5,7 @@ export function installBackground(api) {
   const coordinator = createCoordinator(api);
   const failed = () => {
     api.action.setBadgeText({text:'!'}).catch(()=>{});
-    api.action.setTitle({title:'Local Grayscale · Abgleich fehlgeschlagen. Menü öffnen; ggf. Seite neu laden.'}).catch(()=>{});
+    api.action.setTitle({title:'Muted · Abgleich fehlgeschlagen. Menü öffnen; ggf. Seite neu laden.'}).catch(()=>{});
   };
   const refresh = () => { coordinator.refresh().catch(failed); };
   // Register synchronously: events can arrive while storage initialization is pending.

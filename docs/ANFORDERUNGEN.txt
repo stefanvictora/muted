@@ -1,7 +1,7 @@
 Implementierungsplan für eine lokale Graustufen Erweiterung
 
 Stand: 24. Oktober 2026
-Arbeitsname: Local Grayscale
+Arbeitsname: Muted
 Ziel: persönliche Nutzung unter Windows in Microsoft Edge und Google Chrome
 Status: vollständiger Plan; keine Erweiterung implementiert oder installiert
 

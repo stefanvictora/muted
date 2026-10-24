@@ -1,5 +1,7 @@
-Local Grayscale 0.2.0 — 24. Oktober 2026
+Muted 0.2.0 — 24. Oktober 2026
 
+- Umbenennung in Muted: Oberflächen, Tooltips, JSON-Export und neue Pakete.
+  Keine Tagline in der App; bestehende Einstellungen bleiben kompatibel.
 - Einzelne Tab-Fehler erscheinen nur im Popup der betroffenen Seite. Das Icon
   zeigt weiterhin Ein/Aus/Pause; Warnungen bleiben für fehlende Rechte und Grundfehler.
 - Ein gemeinsamer, einmalig angeforderter HTTP-/HTTPS-Zugriff für beide Modi.
@@ -18,7 +20,7 @@ Local Grayscale 0.2.0 — 24. Oktober 2026
 - Direkte Entwicklung aus extension/; optionale Paketierung, ZIP nur mit --zip.
   Umfangreiche manuelle Abnahme ist keine Voraussetzung für persönliche Nutzung.
 
-Local Grayscale 0.1.1 — 24. Oktober 2026 — Prüfkandidat
+Muted 0.1.1 — 24. Oktober 2026 — Prüfkandidat
 
 - Behoben: Eine wartende Injektion in einem eingefrorenen Tab blockierte die
   gemeinsame Worker-Warteschlange. Popup blieb bei „Bitte warten“, neue Seiten
@@ -34,7 +36,7 @@ Local Grayscale 0.1.1 — 24. Oktober 2026 — Prüfkandidat
 - Vier zusätzliche Regressionstests, insgesamt 27 bestanden. Native Zustimmung
   im persönlichen Edge-Profil weiterhin zur erneuten manuellen Prüfung offen.
 
-Local Grayscale 0.1.0 — 24. Oktober 2026 — Prüfkandidat
+Muted 0.1.0 — 24. Oktober 2026 — Prüfkandidat
 
 - Lokale Manifest-V3-Runtime ohne externe Abhängigkeiten oder Netzwerkfunktionen.
 - Globale/ausgewählte Betriebsart mit unabhängigen Domain-Listen und optionalen Hostrechten.

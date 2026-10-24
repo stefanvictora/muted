@@ -1,4 +1,4 @@
-# Local Grayscale
+# Muted
 
 Persönliche lokale Graustufen-Erweiterung für Edge und Chrome, Version 0.2.0.
 Keine Laufzeitabhängigkeiten, Netzwerkfunktionen oder automatischen Fremdupdates.

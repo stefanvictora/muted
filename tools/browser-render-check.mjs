@@ -11,7 +11,7 @@ const server=createServer(async(req,res)=>{
 await new Promise(resolve=>server.listen(9340,resolve));
 const cdp=await connect(port), report={browser:cdp.info.Browser,checks:[],errors:[],scope:'Controller/CSS über echten activeTab-Testzugriff; keine dauerhaften Hostrechte erteilt'};
 try {
-  const extension=(await cdp.send('Extensions.getExtensions')).extensions.find(e=>e.name==='Local Grayscale');
+  const extension=(await cdp.send('Extensions.getExtensions')).extensions.find(e=>e.name==='Muted');
   const optionsTarget=await cdp.send('Target.createTarget',{url:`chrome-extension://${extension.id}/options/options.html`});
   const popup=await cdp.attach(optionsTarget.targetId);
   await new Promise(resolve=>setTimeout(resolve,300));

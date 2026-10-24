@@ -66,7 +66,7 @@ try {
   });
   await cdp.evaluate(session,`document.querySelector('#export').click()`,true);
   await downloaded;
-  assert.deepEqual(JSON.parse(await readFile(resolve(downloadPath,'local-grayscale.json'),'utf8')),{...portable,colorExceptions:['example.com']});
+  assert.deepEqual(JSON.parse(await readFile(resolve(downloadPath,'muted.json'),'utf8')),{...portable,colorExceptions:['example.com']});
   report.checks.push('Blob-Export unter unveränderter strenger CSP; genau die portablen Felder');
   await cdp.send('Emulation.setDeviceMetricsOverride',{width:900,height:1000,deviceScaleFactor:1,mobile:false},session);
   const screenshot=await cdp.send('Page.captureScreenshot',{format:'png',captureBeyondViewport:true},session);

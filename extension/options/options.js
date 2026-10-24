@@ -70,7 +70,7 @@ for (const [prefix,list] of [['color','colorExceptions'],['gray','grayscaleSites
 el('export').addEventListener('click',()=>{
   if (!snapshot?.state) return;
   const url=URL.createObjectURL(new Blob([exportSettings(snapshot.state)],{type:'application/json'}));
-  const anchor=document.createElement('a'); anchor.href=url; anchor.download='local-grayscale.json';
+  const anchor=document.createElement('a'); anchor.href=url; anchor.download='muted.json';
   document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
 });
 el('import-file').addEventListener('change',async()=>{

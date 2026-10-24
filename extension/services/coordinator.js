@@ -67,7 +67,7 @@ export function createCoordinator(api, now = Date.now) {
     const attention = !grants.global;
     const badge = attention ? '!' : !state.enabled ? 'OFF' : state.pauseUntil > now() ? 'II' : 'ON';
     await api.action.setBadgeText({text:badge});
-    await api.action.setTitle({title:`Local Grayscale · ${attention?'Aktion erforderlich':!state.enabled?'Ausgeschaltet':state.pauseUntil > now()?'Pause':'Eingeschaltet'}`});
+    await api.action.setTitle({title:`Muted · ${attention?'Aktion erforderlich':!state.enabled?'Ausgeschaltet':state.pauseUntil > now()?'Pause':'Eingeschaltet'}`});
   }
   function initialize() {
     return initialization ??= serial(async () => {
