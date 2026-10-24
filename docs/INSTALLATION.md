@@ -1,42 +1,45 @@
-# Installation und Bedienung
+# Installation and usage
 
-## Laden und aktualisieren
+## Load and update
 
-1. In Edge `edge://extensions`, in Chrome `chrome://extensions` öffnen und den Entwicklermodus einschalten.
-2. „Entpackte Erweiterung laden“ wählen und `<repository-root>\extension` auswählen. Bei einem Sicherungspaket dessen Unterordner `extension` verwenden.
-3. Andere Kopien deaktivieren, Symbol anheften und im Popup einmal „Zugriff erlauben“ klicken.
+1. Open `edge://extensions` in Edge or `chrome://extensions` in Chrome and enable **Developer mode**.
+2. Choose **Load unpacked** and select the repository's `extension` folder. For a packaged copy,
+   use the `extension` subfolder inside the package.
+3. Disable other copies, pin the icon, and click **Allow access** once in the popup.
 
-Ist dieser Ordner bereits geladen, genügt nach Änderungen „Neu laden“ in der Erweiterungsverwaltung.
-Offene Popups/Einstellungen neu öffnen und bei Bedarf Websites neu laden, damit ältere Seitenskripte
-ersetzt werden. Lokale Dateiänderungen können bereits beim erneuten Öffnen der Oberfläche wirksam sein.
-Edge und Chrome speichern Einstellungen unabhängig voneinander.
+If this folder is already loaded, click **Reload** in the extension manager after making changes.
+Reopen any popup or settings page and reload affected websites if needed to replace older content
+scripts. Local file changes may already take effect when an extension page is reopened.
+Edge and Chrome store their settings independently.
 
-## Bedienung
+## Controls
 
-- **Alle Websites mit Ausnahmen:** Die Liste „Farbig lassen“ enthält die Ausnahmen.
-- **Nur ausgewählte Websites:** Die Liste „Grau schalten“ enthält die zu filternden Websites.
-- Die jeweils andere Liste bleibt gespeichert. Beide Modi verwenden denselben Vollzugriff.
-- Der Hauptschalter bleibt gespeichert. Ausschalten beendet eine laufende Pause.
-- Eine neue Pause ersetzt die bisherige Frist durch jetzt plus 5, 15 oder 30 Minuten.
-  „Pause beenden“ stellt den normalen Betrieb sofort wieder her.
-- Domains umfassen Subdomains. IP-Adressen und localhost gelten exakt.
-- Import/Export überträgt Modus und Listen. Schalter, Pause und Browserfreigabe werden nicht importiert.
-  Ein Import hat eine Vorschau und wird erst mit „Importieren“ übernommen.
+- **All websites with exceptions:** the **Keep in color** list contains the exceptions.
+- **Selected websites only:** the **Make gray** list contains the websites to filter.
+- The other list remains saved. Both modes use the same access to all websites.
+- The on/off setting is saved. Turning grayscale off ends an active pause.
+- A new pause replaces the previous deadline with the current time plus 5, 15, or 30 minutes.
+  **End pause** resumes normal operation immediately.
+- Domain rules include subdomains. IP addresses and localhost match exactly.
+- Import/export transfers the mode and lists. It does not import the on/off setting, pause,
+  or browser permissions. An import shows a preview and applies only after clicking **Import**.
+- The interface follows the browser's interface language: German or English, with English
+  as the fallback for other languages.
 
-## Bestehende Einstellungen
+## Existing settings
 
-Beim Update von 0.1.x bleiben Listen, Hauptschalter und Pausen erhalten. Auch alte JSON-Exporte sind
-weiter verwendbar. Wer bisher nur einzelne Websites freigegeben hatte, muss einmal den gemeinsamen
-Zugriff erlauben. Eine bereits bestehende globale Freigabe wird weiterverwendet.
+Updating from 0.1.x preserves lists, the on/off setting, and pauses. Older JSON exports remain
+usable. If you previously granted access only to individual websites, allow the shared access
+once. An existing global permission grant is reused.
 
-## Falls etwas nicht stimmt
+## Troubleshooting
 
-Bei fehlendem Zugriff erscheint der Freigabeknopf. Browserrechte lassen sich weiterhin in der
-Erweiterungsverwaltung entziehen. Bei einem Neuladehinweis die betroffene Website neu laden.
-Beschädigte Einstellungen können ausdrücklich zurückgesetzt werden; das löscht beide Listen und
-schaltet den Filter aus, behält aber die Browserfreigabe.
+When access is missing, an **Allow access** button appears. You can revoke browser permissions
+in the extension manager. If a reload message appears, reload the affected website.
+Corrupted settings can be explicitly reset; this clears both lists and turns the filter off
+while retaining browser access.
 
-Vor größeren Änderungen genügt eine Kopie des funktionierenden Extension-Ordners und optional ein
-JSON-Export. Für den Rückweg die alte Kopie am gleichen geladenen Pfad wiederherstellen und die
-Erweiterung sowie betroffene Websites neu laden. Vor einer Deinstallation Einstellungen exportieren.
-Eine manuelle Hashprüfung oder vollständige Browser-Abnahme ist für die persönliche Nutzung keine Pflicht.
+Before larger changes, keep a copy of the working extension folder and optionally a JSON export.
+To roll back, restore the old copy at the same loaded path, then reload the extension and affected
+websites. Export settings before uninstalling. A manual hash check or complete browser acceptance
+test is not required for personal use.

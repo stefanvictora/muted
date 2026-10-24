@@ -14,7 +14,7 @@ const name=`muted-${version}-${stamp}`;
 const base=join(root,'releases');await mkdir(base,{recursive:true});
 const destination=join(base,name);await mkdir(destination); // Never overwrite an existing snapshot.
 await mkdir(join(destination,'docs'));
-for(const path of ['extension','docs/INSTALLATION.md','docs/SICHERHEIT.md','docs/ENTWICKLUNG.md','docs/PRUEFPROTOKOLL.md','README.md','CHANGELOG.txt']) await cp(join(root,path),join(destination,path),{recursive:true,errorOnExist:true,force:false});
+for(const path of ['extension','docs/INSTALLATION.md','docs/SECURITY.md','docs/DEVELOPMENT.md','docs/VERIFICATION.md','README.md','CHANGELOG.txt']) await cp(join(root,path),join(destination,path),{recursive:true,errorOnExist:true,force:false});
 const manifest=await createManifest(destination,version);
 await writeFile(join(destination,'release-manifest.txt'),manifest,{flag:'wx'});
 await writeFile(join(root,'release-manifest.txt'),manifest);

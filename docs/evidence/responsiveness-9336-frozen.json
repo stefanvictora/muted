@@ -3,12 +3,12 @@
   "stalled": false,
   "frozen": true,
   "checks": [
-    "Worker-Status antwortet",
-    "Vorhandene und neue Seite grau",
-    "Aufwachen nach Ausschalten aktiviert keinen alten Filter",
-    "Ausschalten, Einschalten, Pause und Fortsetzen im echten Browser"
+    "Worker status responds",
+    "Existing and new pages are gray",
+    "Waking after turning off does not activate an old filter",
+    "Off, on, pause, and resume in the actual browser"
   ],
   "errors": [],
-  "scope": "Isoliertes Testmanifest mit festen Hosts; keine native Zustimmung simuliert.",
+  "scope": "Isolated test manifest with fixed hosts; native consent was not simulated.",
   "statusMs": 79
 }

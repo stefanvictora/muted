@@ -1,7 +1,7 @@
 # Muted 0.2.0
-# SHA-256; ausschließlich Runtime-Dateien in extension/
-b567119fdf81b4d28421c7d1c4d87387d824b6c68452a9471edb151fe1c9880a  extension/_locales/de/messages.json
-d6c844a40c6dffd7e72d33e3fe911237d1c5e88dda8dc5ea8e82d97782eb2205  extension/_locales/en/messages.json
+# SHA-256; runtime files in extension/ only
+5f91683696a0305d22e718b0f3bb156e6e43120d4c22ddd6c963500f002fc9b2  extension/_locales/de/messages.json
+c5e514de4bb4548b16f15954c895de70d485435816bbf635a90dc5564ea3a42e  extension/_locales/en/messages.json
 8ac88e9913b82bbcdfde3045c75ee89ffc3b888be69b83ba4abeb3daba18783b  extension/assets/icon-128.png
 c7301496292f21b59a447ecf973cb1dbd1466aa2dcbd5077101111305d020537  extension/assets/icon-16.png
 732e5ddca48b569d60eb16e11aa14d4d91ae827268690cbb4ebd64139cec1e77  extension/assets/icon-32.png

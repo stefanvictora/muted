@@ -15,7 +15,7 @@ async function files(root, relative='extension') {
 const hash=async path=>createHash('sha256').update(await readFile(path)).digest('hex');
 
 export async function createManifest(root,version) {
-  const lines=[`# Muted ${version}`, '# SHA-256; ausschließlich Runtime-Dateien in extension/'];
+  const lines=[`# Muted ${version}`, '# SHA-256; runtime files in extension/ only'];
   for(const path of await files(root)) lines.push(`${await hash(join(root,path))}  ${path}`);
   return lines.join('\n')+'\n';
 }

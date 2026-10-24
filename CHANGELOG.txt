@@ -1,48 +1,46 @@
-Muted 0.2.0 — 24. Oktober 2026
+Muted 0.2.0 — October 24, 2026
 
-- Umbenennung in Muted: Oberflächen, Tooltips, JSON-Export und neue Pakete.
-  Keine Tagline in der App; bestehende Einstellungen bleiben kompatibel.
-- Einzelne Tab-Fehler erscheinen nur im Popup der betroffenen Seite. Das Icon
-  zeigt weiterhin Ein/Aus/Pause; Warnungen bleiben für fehlende Rechte und Grundfehler.
-- Ein gemeinsamer, einmalig angeforderter HTTP-/HTTPS-Zugriff für beide Modi.
-  Listen und Modus steuern den Filter, nicht mehr die Browserrechte.
-- Rechteverwaltung in den Einstellungen entfällt. Ein Hinweis zum Freigeben
-  erscheint nur bei fehlendem Zugriff. Bestehende UX-Aufräumarbeiten bleiben.
-- Alte Listen, Schalter, Pausen und JSON-Exporte bleiben kompatibel; auch das
-  Ziel einer unterbrochenen alten Rechtebereinigung wird übernommen.
-- Status und Dokumententscheidungen verwenden den geladenen Zustand ohne
-  wiederholte Browserabfragen. Tab-Ereignisse betreffen einzelne Tabs; bereits
-  abgeglichene Tabs werden beim Aktivieren nicht erneut injiziert.
-- Worker-Aufwachen ohne globale Tab-Suche bei unveränderter Registrierung.
-  Neue Registrierung und abgelaufene Pause gleichen bestehende Seiten ab.
-- Popup/Settings erhalten Änderungsnachrichten statt regelmäßigem Polling.
-- Schutz gegen schlafende Tabs, veraltete Aktivierungen und Rechteverlust bleibt.
-- Direkte Entwicklung aus extension/; optionale Paketierung, ZIP nur mit --zip.
-  Umfangreiche manuelle Abnahme ist keine Voraussetzung für persönliche Nutzung.
+- Renamed to Muted across the interface, tooltips, JSON export, and new packages.
+  No tagline in the app; existing settings remain compatible.
+- Individual tab errors appear only in the affected page's popup. The icon
+  continues to show on/off/pause; warnings remain for missing permissions and fundamental errors.
+- Both modes share a single, explicitly requested HTTP/HTTPS access grant.
+  Lists and mode control the filter rather than browser permissions.
+- Removed permission management from settings. An access prompt appears only
+  when permissions are missing. Existing UX improvements are retained.
+- Older lists, on/off settings, pauses, and JSON exports remain compatible;
+  the intended result of an interrupted older permission cleanup is also migrated.
+- Status and document decisions use loaded state without repeated browser queries.
+  Tab events affect individual tabs; tabs already reconciled are not reinjected on activation.
+- Worker wake-up does not query all tabs when registration is unchanged.
+  New registration and expired pauses reconcile existing pages.
+- Popup/settings receive change notifications instead of polling periodically.
+- Protection against sleeping tabs, stale activations, and permission loss remains.
+- Develop directly from extension/; packaging is optional, with ZIP creation only via --zip.
+  Comprehensive manual acceptance testing is not required for personal use.
 
-Muted 0.1.1 — 24. Oktober 2026 — Prüfkandidat
+Muted 0.1.1 — October 24, 2026 — Test candidate
 
-- Behoben: Eine wartende Injektion in einem eingefrorenen Tab blockierte die
-  gemeinsame Worker-Warteschlange. Popup blieb bei „Bitte warten“, neue Seiten
-  bekamen keine Filterentscheidung. In Edge mit genau einem eingefrorenen Tab
-  reproduziert; in Edge und Chrome nach Korrektur geprüft.
-- Tab-Abgleich wartet außerhalb der Zustandswarteschlange. Neue Abgleichwünsche
-  werden zusammengefasst; veraltete Ergebnisse werden nicht veröffentlicht.
-- Einzelne Tab-Operationen sind zeitlich begrenzt. Als schlafend/entladen gemeldete
-  Tabs werden nicht geweckt; Aktivieren/Aufwachen löst einen neuen Abgleich aus.
-- Verspätete Aktivierungen prüfen beim tatsächlichen Ausführen den aktuellen
-  Worker-Zustand. Kein Wiederaktivieren einer alten Ein-Einstellung nach Aus.
-- Popup aktualisiert ausstehende Bestätigungen; Status für schlafende Tabs.
-- Vier zusätzliche Regressionstests, insgesamt 27 bestanden. Native Zustimmung
-  im persönlichen Edge-Profil weiterhin zur erneuten manuellen Prüfung offen.
+- Fixed: an injection waiting on a frozen tab blocked the shared worker queue.
+  The popup remained at "Please wait" and new pages received no filtering decision.
+  Reproduced in Edge with exactly one frozen tab; verified after the fix in Edge and Chrome.
+- Tab reconciliation waits outside the state queue. New reconciliation requests
+  are merged; stale results are not published.
+- Individual tab operations have time limits. Tabs reported as sleeping/discarded
+  are not woken; activation/wake-up triggers reconciliation.
+- Delayed activations check the current worker state when they actually execute.
+  An older enabled state cannot reactivate the filter after it has been turned off.
+- The popup refreshes pending confirmations and shows a status for sleeping tabs.
+- Four additional regression tests, 27 passing in total. Native consent in the
+  personal Edge profile was still awaiting another manual check at this stage.
 
-Muted 0.1.0 — 24. Oktober 2026 — Prüfkandidat
+Muted 0.1.0 — October 24, 2026 — Test candidate
 
-- Lokale Manifest-V3-Runtime ohne externe Abhängigkeiten oder Netzwerkfunktionen.
-- Globale/ausgewählte Betriebsart mit unabhängigen Domain-Listen und optionalen Hostrechten.
-- Persistenter Hauptschalter, absolute Pausenfristen und Alarm-Wiederherstellung.
-- Serialisierter Worker, persistente Revisionen und wiederanlaufender Rechteabbau.
-- Idempotenter isolierter Controller, Root-CSS und begrenzte Beobachter.
-- Deutsches Popup, Einstellungen, Freigabeanzeige, Importvorschau und Blob-Export.
-- TDD mit Node-Testläufer und Browser-API-Doubles; reale Teilprüfungen in Edge/Chrome.
-- Vollständige native Browserabnahme noch offen; keine automatische Installation.
+- Local Manifest V3 runtime with no external dependencies or network functions.
+- Global/selected modes with independent domain lists and optional host permissions.
+- Persistent on/off setting, absolute pause deadlines, and alarm restoration.
+- Serialized worker, persistent revisions, and resumable permission cleanup.
+- Idempotent isolated controller, root CSS, and limited observers.
+- German popup, settings, permission display, import preview, and Blob export.
+- TDD with the Node test runner and browser API doubles; partial real-browser checks in Edge/Chrome.
+- Full native browser acceptance testing still pending; no automatic installation.

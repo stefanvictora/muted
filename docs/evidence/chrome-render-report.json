@@ -1,12 +1,12 @@
 {
   "browser": "Chrome/156.0.8078.47",
   "checks": [
-    "Action gewährt temporären Testzugriff; activeTab wird nicht als Dauerfreigabe verwendet",
-    "Echte isolierte Injektion, doppelte Controller-Datei und CSS ergeben grayscale(1)",
-    "Wurzelklasse wird nach Überschreiben wiederhergestellt",
-    "Abschalten stellt ursprünglichen Seitenfilter wieder her; Beobachter bleibt aus",
-    "Keine dauerhaften Hostfreigaben durch Testaktion"
+    "Action grants temporary test access; activeTab is not used as persistent permission",
+    "Actual isolated injection, duplicate controller file, and CSS produce grayscale(1)",
+    "Root class is restored after being overwritten",
+    "Turning off restores the original page filter; observer stays off",
+    "No persistent host grants from the test action"
   ],
   "errors": [],
-  "scope": "Controller/CSS über echten activeTab-Testzugriff; keine dauerhaften Hostrechte erteilt"
+  "scope": "Controller/CSS through actual activeTab test access; no persistent host permissions granted"
 }
