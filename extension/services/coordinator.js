@@ -1,3 +1,4 @@
+import { t, errorText } from '../ui/i18n.js';
 import { readState, writeState } from './state.js';
 import { readGrants } from './permissions.js';
 import { syncRegistration, syncTabs } from './filter.js';
@@ -13,7 +14,7 @@ export function createCoordinator(api, now = Date.now) {
   let tail = Promise.resolve();
   const serial = task => { const result = tail.then(task); tail = result.catch(() => {}); return result; };
   const save = async changes => { state = await writeState(api, state, changes); };
-  const snapshot = () => ({state:error ? null : state, grants, pages:pagesRevision===state?.revision ? pages : {}, error, applying:!!effects});
+  const snapshot = () => ({state:error ? null : state, grants, pages:pagesRevision===state?.revision ? pages : {}, error:error ? errorText(error,api) : null, applying:!!effects});
   function scheduleTabs(tabIds = null) {
     // A global change supersedes queued per-tab work; otherwise merge tab IDs.
     if (requestedPass) tabIds = requestedPass.tabIds === null || tabIds === null
@@ -65,9 +66,9 @@ export function createCoordinator(api, now = Date.now) {
   async function updateBadge() {
     // Individual tab warnings belong in the popup, not the global action status.
     const attention = !grants.global;
-    const badge = attention ? '!' : !state.enabled ? 'OFF' : state.pauseUntil > now() ? 'II' : 'ON';
+    const badge = attention ? '!' : !state.enabled ? t('badge_off',[],api) : state.pauseUntil > now() ? 'II' : t('badge_on',[],api);
     await api.action.setBadgeText({text:badge});
-    await api.action.setTitle({title:`Muted · ${attention?'Aktion erforderlich':!state.enabled?'Ausgeschaltet':state.pauseUntil > now()?'Pause':'Eingeschaltet'}`});
+    await api.action.setTitle({title:`Muted · ${t(attention?'action_required':!state.enabled?'status_off':state.pauseUntil > now()?'status_paused':'enabled',[],api)}`});
   }
   function initialize() {
     return initialization ??= serial(async () => {
@@ -83,7 +84,7 @@ export function createCoordinator(api, now = Date.now) {
         // A new/changed registration or an expired pause must reach old tabs.
         if (registrationChanged || (paused !== null && state.pauseUntil === null)) scheduleTabs();
       } catch {
-        error = 'Initialisierung fehlgeschlagen: Zustand, sicheren Speicherzugriff und Browser-APIs prüfen. Keine neue Filterung. Betroffene Seiten neu laden.';
+        error = 'error_initialization';
         await api.action.setBadgeText({text:'!'}).catch(()=>{});
         try { await api.scripting.unregisterContentScripts({ids:['local-grayscale']}); } catch { /* Error remains visible. */ }
         try {
@@ -103,7 +104,7 @@ export function createCoordinator(api, now = Date.now) {
         return {};
       }
       if (message.type === 'recover') {
-        if (!error) throw new Error('Keine beschädigte Initialisierung vorhanden.');
+        if (!error) throw new Error('error_recovery_unneeded');
         await api.storage.local.setAccessLevel({accessLevel:'TRUSTED_CONTEXTS'});
         state = {...defaultState(),mode:'selected',enabled:false};
         await save({});
@@ -123,10 +124,10 @@ export function createCoordinator(api, now = Date.now) {
         await readPermissions();
       } else if (message.type === 'enabled') await save({enabled: message.value, pauseUntil:null});
       else if (message.type === 'pause') {
-        if (!state.enabled) throw new Error('Zum Pausieren zuerst einschalten.');
+        if (!state.enabled) throw new Error('error_pause_disabled');
         await save({pauseUntil:now() + message.minutes * 60000});
       } else if (message.type === 'resume') await save({pauseUntil:null});
-      else throw new Error('Unbekannter Befehl.');
+      else throw new Error('error_command');
       return reconcile();
     });
     // Renderer work is awaited outside the state queue. Document handshakes and
@@ -160,7 +161,7 @@ export function createCoordinator(api, now = Date.now) {
   async function document(message,sender) {
     exactKeys(message,['type']);
     if (message.type !== 'document' || sender?.id !== api.runtime.id || sender.frameId !== 0 ||
-      !Number.isInteger(sender.tab?.id) || !target(sender.url)) throw new Error('Unzulässiges Dokument.');
+      !Number.isInteger(sender.tab?.id) || !target(sender.url)) throw new Error('error_document');
     await initialize();
     return serial(async () => {
       if (error) throw new Error(error);

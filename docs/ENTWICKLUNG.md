@@ -8,6 +8,14 @@ läuft außerhalb dieser Warteschlange, damit ein schlafender Tab weder Popup no
 `background.js` verbindet Browserereignisse mit dem Coordinator; `content/` wendet den Filter an.
 Popup und Settings teilen sich kleine Helfer in `ui/`. Es gibt kein Framework und keinen Buildschritt.
 
+Alle Oberflächentexte liegen in `_locales/de/messages.json` und `_locales/en/messages.json`.
+`chrome.i18n` wählt die Browser-Oberflächensprache, einschließlich regionaler Varianten;
+`default_locale: "en"` legt Englisch als Fallback fest. `ui/i18n.js` übersetzt Text,
+Platzhalter und Screenreader-Beschriftungen über `data-i18n`-Attribute und formatiert Uhrzeiten
+mit der Browser-Locale. Validierungsfehler tragen stabile `error_…`-Kennungen und werden
+an der Oberfläche bzw. beim Antworten des Workers übersetzt. Originalmeldungen von Browser-APIs
+bleiben erhalten. Neue Texte immer in beiden Sprachdateien ergänzen.
+
 Der Produktname ist Muted. Die internen Kennungen `local-grayscale`,
 `local-grayscale-pause`, `local-grayscale-v1-active` und `__localGrayscaleV1`
 bleiben für bestehende Script-Registrierungen, Pausen und bereits injizierte
@@ -48,6 +56,9 @@ behalten; Erwartungen an bewusst entfernte Rechteverwaltung wurden auf das neue 
 Browserchecks nur bei passenden Änderungen, immer mit getrenntem Testprofil und lokalem Debug-Port:
 
 - `node tools/browser-check.mjs <Port> <Name>`: Options-UI, echter Dateiimport und Export.
+- `node tools/browser-i18n-check.mjs <Port> <de|en>`: Übersetzungen, Screenreader-Texte,
+  Validierungsfehler und Layout. Das isolierte Testprofil mit `--lang=de`, `--lang=en-US`
+  oder für den englischen Fallback z. B. `--lang=fr` starten.
 - `node tools/browser-render-check.mjs <Port> <Name>`: Controller/CSS mit temporärem activeTab-Zugriff.
 - `node tools/browser-responsiveness-check.mjs <Port> --frozen`: schlafender Tab, Schalter/Pause,
   ausgewählter Modus mit Vollzugriff und UI-Benachrichtigungen.

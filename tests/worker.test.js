@@ -54,7 +54,7 @@ test('Rechteverlust macht alte Dokumentantworten ungültig und entfernt Registri
   assert.ok(after.revision>before.revision);
   assert.equal(model.scripts.length,0);
   assert.equal(model.badge,'!');
-  assert.equal(model.title,'Muted · Aktion erforderlich');
+  assert.equal(model.title,'Muted · Action required');
 });
 
 test('Beschädigtes Schema und fehlender sicherer Speicher stoppen Injektion ohne stilles Zurücksetzen', async () => {

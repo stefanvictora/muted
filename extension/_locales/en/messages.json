@@ -1,0 +1,335 @@
+{
+  "language_code": {
+    "message": "en"
+  },
+  "extension_description": {
+    "message": "Grayscale for websites with domain rules and a timed pause."
+  },
+  "grayscale": {
+    "message": "Grayscale"
+  },
+  "grant_access": {
+    "message": "Allow access"
+  },
+  "popup_setup": {
+    "message": "Allow access once for both modes. Your rules determine which websites turn gray."
+  },
+  "current_website": {
+    "message": "Current website"
+  },
+  "checking_website": {
+    "message": "Checking website …"
+  },
+  "please_wait": {
+    "message": "Please wait"
+  },
+  "website_rule": {
+    "message": "Website rule"
+  },
+  "includes_subdomains": {
+    "message": "Includes subdomains"
+  },
+  "pause": {
+    "message": "Pause"
+  },
+  "minutes_5": {
+    "message": "5 min"
+  },
+  "minutes_15": {
+    "message": "15 min"
+  },
+  "minutes_30": {
+    "message": "30 min"
+  },
+  "resume": {
+    "message": "End pause"
+  },
+  "more_actions": {
+    "message": "More actions"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "refresh": {
+    "message": "Refresh"
+  },
+  "options_title": {
+    "message": "Muted · Settings"
+  },
+  "reset_settings": {
+    "message": "Reset settings"
+  },
+  "recovery_help": {
+    "message": "The saved settings are corrupted. Resetting clears both lists, turns the filter off, and keeps browser access. Reload affected pages afterward."
+  },
+  "reset": {
+    "message": "Reset"
+  },
+  "options_setup": {
+    "message": "Both modes need access to all websites. Your rules determine which ones turn gray."
+  },
+  "apply_grayscale": {
+    "message": "Apply grayscale"
+  },
+  "select_websites": {
+    "message": "Select websites"
+  },
+  "mode_global": {
+    "message": "All websites with exceptions"
+  },
+  "mode_selected": {
+    "message": "Selected websites only"
+  },
+  "apply": {
+    "message": "Apply"
+  },
+  "keep_color": {
+    "message": "Keep in color"
+  },
+  "keep_website_color": {
+    "message": "Keep website in color"
+  },
+  "example_color": {
+    "message": "e.g. maps.google.com"
+  },
+  "add": {
+    "message": "Add"
+  },
+  "subdomain_hint": {
+    "message": "Also applies to subdomains."
+  },
+  "color_websites": {
+    "message": "Websites in color"
+  },
+  "make_gray": {
+    "message": "Make gray"
+  },
+  "make_website_gray": {
+    "message": "Make website gray"
+  },
+  "example_gray": {
+    "message": "e.g. reddit.com"
+  },
+  "gray_websites": {
+    "message": "Grayscale websites"
+  },
+  "import_export": {
+    "message": "Import & export"
+  },
+  "export_help": {
+    "message": "Saves the mode and both lists. Importing replaces these settings."
+  },
+  "export_json": {
+    "message": "Export as JSON"
+  },
+  "import_json": {
+    "message": "Import JSON"
+  },
+  "file_limit": {
+    "message": "· max. 64 KB"
+  },
+  "import_preview": {
+    "message": "Import preview"
+  },
+  "import_apply": {
+    "message": "Import"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "no_website": {
+    "message": "No supported website"
+  },
+  "until": {
+    "message": "Until $TIME$",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "14:30"
+      }
+    }
+  },
+  "unsupported_help": {
+    "message": "Browser pages, extension stores, local files, and PDF viewers are not supported."
+  },
+  "exact_address": {
+    "message": "This address only"
+  },
+  "inherited_rule": {
+    "message": "Managed through $DOMAINS$. Change this in Settings.",
+    "placeholders": {
+      "domains": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "mode_global_help": {
+    "message": "All websites turn gray. Exceptions stay in color."
+  },
+  "mode_selected_help": {
+    "message": "Only websites on this list turn gray."
+  },
+  "empty_list": {
+    "message": "No websites added"
+  },
+  "included_in": {
+    "message": "Included in $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "remove": {
+    "message": "Remove"
+  },
+  "remove_domain": {
+    "message": "Remove $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "grayscale_off": {
+    "message": "Grayscale off"
+  },
+  "grayscale_on": {
+    "message": "Grayscale on"
+  },
+  "pause_until": {
+    "message": "Paused until $TIME$",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "14:30"
+      }
+    }
+  },
+  "import_help": {
+    "message": "Replaces the mode and both lists. The on/off setting and pause are preserved."
+  },
+  "status_unsupported": {
+    "message": "Not supported"
+  },
+  "status_setup": {
+    "message": "Access required"
+  },
+  "status_off": {
+    "message": "Off"
+  },
+  "status_paused": {
+    "message": "Paused"
+  },
+  "status_exception": {
+    "message": "Color exception"
+  },
+  "status_unselected": {
+    "message": "Not selected"
+  },
+  "status_wanted": {
+    "message": "Checking filter application"
+  },
+  "status_active": {
+    "message": "Grayscale active"
+  },
+  "status_pending": {
+    "message": "Filter application not yet confirmed – check again"
+  },
+  "status_sleeping": {
+    "message": "Tab is sleeping – open it to update"
+  },
+  "status_reload": {
+    "message": "Filter application or removal not confirmed – reload the page"
+  },
+  "action_required": {
+    "message": "Action required"
+  },
+  "enabled": {
+    "message": "On"
+  },
+  "badge_on": {
+    "message": "ON"
+  },
+  "badge_off": {
+    "message": "OFF"
+  },
+  "sync_failed": {
+    "message": "Muted · Update failed. Open the menu; reload the page if needed."
+  },
+  "error_access_denied": {
+    "message": "Website access denied. The previous state is preserved."
+  },
+  "error_worker_unavailable": {
+    "message": "Background worker unavailable. Reload the extension."
+  },
+  "error_domain_text": {
+    "message": "The domain must be text."
+  },
+  "error_invalid_domain": {
+    "message": "Enter a valid hostname without a path, port, or wildcard."
+  },
+  "error_fields": {
+    "message": "Unknown or missing fields."
+  },
+  "error_mode": {
+    "message": "Invalid mode."
+  },
+  "error_rule_limit": {
+    "message": "A maximum of 200 domain rules is allowed in total."
+  },
+  "error_state_schema": {
+    "message": "Unknown or corrupted state schema."
+  },
+  "error_permission_cleanup": {
+    "message": "Invalid permission cleanup."
+  },
+  "error_file_size": {
+    "message": "The file must not exceed 64 KiB."
+  },
+  "error_import_version": {
+    "message": "Unknown import version."
+  },
+  "error_invalid_json": {
+    "message": "The file does not contain valid JSON."
+  },
+  "error_sender": {
+    "message": "Unauthorized sender."
+  },
+  "error_command": {
+    "message": "Unknown command."
+  },
+  "error_tab": {
+    "message": "Invalid tab."
+  },
+  "error_switch": {
+    "message": "Invalid on/off setting."
+  },
+  "error_pause_duration": {
+    "message": "Invalid pause duration."
+  },
+  "error_list": {
+    "message": "Unknown list."
+  },
+  "error_import": {
+    "message": "Invalid import."
+  },
+  "error_secure_storage": {
+    "message": "Secure storage access is unavailable."
+  },
+  "error_initialization": {
+    "message": "Initialization failed: check the saved state, secure storage access, and browser APIs. No new filtering will be applied. Reload affected pages."
+  },
+  "error_recovery_unneeded": {
+    "message": "There is no failed initialization to recover from."
+  },
+  "error_pause_disabled": {
+    "message": "Turn grayscale on before pausing."
+  },
+  "error_document": {
+    "message": "Unauthorized document."
+  }
+}

@@ -1,10 +1,11 @@
 # Muted
 
-Persönliche lokale Graustufen-Erweiterung für Edge und Chrome, Version 0.2.0.
+Graustufen-Erweiterung für Edge und Chrome, Version 0.2.0.
 Keine Laufzeitabhängigkeiten, Netzwerkfunktionen oder automatischen Fremdupdates.
 
 - Alle Websites mit Farbausnahmen oder nur ausgewählte Websites.
 - Hauptschalter und Pause für 5, 15 oder 30 Minuten.
+- Deutsch und Englisch, automatisch anhand der Browser-Oberflächensprache; für andere Sprachen Englisch.
 - Getrennte Domainlisten mit Subdomains sowie lokaler JSON-Import/-Export.
 - Einmaliger Zugriff auf alle HTTP-/HTTPS-Websites für beide Modi. Die Listen bestimmen, wo der Filter aktiv ist; sie begrenzen nicht die Browserrechte.
 

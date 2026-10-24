@@ -41,7 +41,7 @@ try {
   report.checks.push('Moduswechsel und Domain hinzufügen über echte Options-UI');
   await cdp.evaluate(session,`document.querySelector('#gray-input').value='https://invalid.example/a';document.querySelector('#gray-add').click()`,true);
   await cdp.evaluate(session,`new Promise(resolve=>{const check=()=>document.querySelector('#gray-add').disabled?setTimeout(check,25):resolve(true);check();})`);
-  assert.match(await cdp.evaluate(session,`document.querySelector('#error').textContent`),/Hostnamen/);
+  assert.equal(await cdp.evaluate(session,`document.querySelector('#error').textContent`),await cdp.evaluate(session,`chrome.i18n.getMessage('error_invalid_domain')`));
   report.checks.push('Ungültige Domain erzeugt sichtbaren Fehler');
   await mkdir('.test-artifacts',{recursive:true});
   const portable={formatVersion:1,mode:'selected',colorExceptions:['EXAMPLE.com'],grayscaleSites:['localhost']};

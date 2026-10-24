@@ -1,13 +1,15 @@
-import { command, requestFromClick, labels, el, run, watch } from '../ui/api.js';
+import { t, formatTime, localize } from '../ui/i18n.js';
+import { command, requestFromClick, statusLabel, el, run, watch } from '../ui/api.js';
 import { target, decide, BROAD_HOSTS } from '../core/policy.js';
 import { matchesDomain, exactHost } from '../core/domains.js';
 
+localize();
 let snapshot, tab, action;
 function render(next) {
   if (next) snapshot=next;
   if (!snapshot) return;
   const state=snapshot.state, page=target(tab?.url);
-  el('host').textContent=page?.host ?? 'Keine unterstützte Website';
+  el('host').textContent=page?.host ?? t('no_website');
   el('enabled').disabled=!state;
   const needsSetup=!!state && !snapshot.grants?.global;
   el('setup').hidden=!needsSetup;
@@ -26,20 +28,20 @@ function render(next) {
   // The switch takes precedence over setup and stale page status, but cleanup
   // failures must remain visible even when the requested filter is off.
   if (!state.enabled && reason!=='reload') reason='off';
-  if (el('site-card').hidden && (reason==='reload')) el('attention').textContent=labels[reason];
-  el('status').textContent=labels[reason] ?? labels.pending;
+  if (el('site-card').hidden && (reason==='reload')) el('attention').textContent=statusLabel(reason);
+  el('status').textContent=statusLabel(reason);
   el('enabled').checked=state.enabled;
-  el('until').textContent=state.pauseUntil ? `Bis ${new Date(state.pauseUntil).toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})}` : '';
+  el('until').textContent=state.pauseUntil ? t('until', [formatTime(state.pauseUntil)]) : '';
   el('resume').hidden=!state.pauseUntil;
   el('resume').disabled=!state.pauseUntil;
-  if (!page) { el('scope').textContent='Browserseiten, Stores, lokale Dateien und PDF-Ansichten sind nicht unterstützt.'; return; }
-  el('scope').textContent=exactHost(page.host)?'Nur diese Adresse':'Inklusive Subdomains';
+  if (!page) { el('scope').textContent=t('unsupported_help'); return; }
+  el('scope').textContent=exactHost(page.host)?t('exact_address'):t('includes_subdomains');
   const list=state.mode==='global'?'colorExceptions':'grayscaleSites';
   const matching=state[list].filter(domain=>matchesDomain(page.host,domain));
   const inherited=matching.some(domain=>domain!==page.host);
-  el('site-note').textContent=inherited ? `Geregelt über ${matching.join(', ')}. In den Einstellungen ändern.` : '';
+  el('site-note').textContent=inherited ? t('inherited_rule', [matching.join(', ')]) : '';
   const remove=matching.includes(page.host);
-  el('site').textContent=state.mode==='global' ? (remove?'Grau schalten':'Farbig lassen') : (remove?'Farbig lassen':'Grau schalten');
+  el('site').textContent=state.mode==='global' ? (remove?t('make_gray'):t('keep_color')) : (remove?t('keep_color'):t('make_gray'));
   el('site').disabled=!state.enabled || needsSetup || inherited;
   action={type:remove?'remove':'add',list,domain:page.host};
 }

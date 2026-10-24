@@ -1,0 +1,335 @@
+{
+  "language_code": {
+    "message": "de"
+  },
+  "extension_description": {
+    "message": "Graustufen für Websites mit Domain-Regeln und zeitlich begrenzter Pause."
+  },
+  "grayscale": {
+    "message": "Graustufen"
+  },
+  "grant_access": {
+    "message": "Zugriff erlauben"
+  },
+  "popup_setup": {
+    "message": "Einmal für beide Modi. Deine Regeln bestimmen, welche Websites grau werden."
+  },
+  "current_website": {
+    "message": "Aktuelle Website"
+  },
+  "checking_website": {
+    "message": "Website wird geprüft …"
+  },
+  "please_wait": {
+    "message": "Bitte warten"
+  },
+  "website_rule": {
+    "message": "Website-Regel"
+  },
+  "includes_subdomains": {
+    "message": "Inklusive Subdomains"
+  },
+  "pause": {
+    "message": "Pausieren"
+  },
+  "minutes_5": {
+    "message": "5 Min."
+  },
+  "minutes_15": {
+    "message": "15 Min."
+  },
+  "minutes_30": {
+    "message": "30 Min."
+  },
+  "resume": {
+    "message": "Pause beenden"
+  },
+  "more_actions": {
+    "message": "Weitere Aktionen"
+  },
+  "settings": {
+    "message": "Einstellungen"
+  },
+  "refresh": {
+    "message": "Aktualisieren"
+  },
+  "options_title": {
+    "message": "Muted · Einstellungen"
+  },
+  "reset_settings": {
+    "message": "Einstellungen zurücksetzen"
+  },
+  "recovery_help": {
+    "message": "Die gespeicherten Einstellungen sind beschädigt. Zurücksetzen löscht beide Listen, schaltet den Filter aus und behält die Browserfreigabe. Betroffene Seiten danach neu laden."
+  },
+  "reset": {
+    "message": "Zurücksetzen"
+  },
+  "options_setup": {
+    "message": "Beide Modi benötigen Zugriff auf alle Websites. Deine Regeln bestimmen, welche grau werden."
+  },
+  "apply_grayscale": {
+    "message": "Graustufen anwenden"
+  },
+  "select_websites": {
+    "message": "Websites auswählen"
+  },
+  "mode_global": {
+    "message": "Alle Websites mit Ausnahmen"
+  },
+  "mode_selected": {
+    "message": "Nur ausgewählte Websites"
+  },
+  "apply": {
+    "message": "Übernehmen"
+  },
+  "keep_color": {
+    "message": "Farbig lassen"
+  },
+  "keep_website_color": {
+    "message": "Website farbig lassen"
+  },
+  "example_color": {
+    "message": "z. B. maps.google.com"
+  },
+  "add": {
+    "message": "Hinzufügen"
+  },
+  "subdomain_hint": {
+    "message": "Gilt auch für Subdomains."
+  },
+  "color_websites": {
+    "message": "Farbige Websites"
+  },
+  "make_gray": {
+    "message": "Grau schalten"
+  },
+  "make_website_gray": {
+    "message": "Website grau schalten"
+  },
+  "example_gray": {
+    "message": "z. B. reddit.com"
+  },
+  "gray_websites": {
+    "message": "Graue Websites"
+  },
+  "import_export": {
+    "message": "Import & Export"
+  },
+  "export_help": {
+    "message": "Sichert den Modus und beide Listen. Ein Import ersetzt diese Einstellungen."
+  },
+  "export_json": {
+    "message": "Als JSON exportieren"
+  },
+  "import_json": {
+    "message": "JSON importieren"
+  },
+  "file_limit": {
+    "message": "· max. 64 KB"
+  },
+  "import_preview": {
+    "message": "Importvorschau"
+  },
+  "import_apply": {
+    "message": "Importieren"
+  },
+  "cancel": {
+    "message": "Abbrechen"
+  },
+  "no_website": {
+    "message": "Keine unterstützte Website"
+  },
+  "until": {
+    "message": "Bis $TIME$",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "14:30"
+      }
+    }
+  },
+  "unsupported_help": {
+    "message": "Browserseiten, Stores, lokale Dateien und PDF-Ansichten sind nicht unterstützt."
+  },
+  "exact_address": {
+    "message": "Nur diese Adresse"
+  },
+  "inherited_rule": {
+    "message": "Geregelt über $DOMAINS$. In den Einstellungen ändern.",
+    "placeholders": {
+      "domains": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "mode_global_help": {
+    "message": "Alle Websites werden grau. Ausnahmen bleiben farbig."
+  },
+  "mode_selected_help": {
+    "message": "Nur Websites auf dieser Liste werden grau."
+  },
+  "empty_list": {
+    "message": "Keine Websites hinzugefügt"
+  },
+  "included_in": {
+    "message": "Enthalten in $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "remove": {
+    "message": "Entfernen"
+  },
+  "remove_domain": {
+    "message": "$DOMAIN$ entfernen",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "grayscale_off": {
+    "message": "Graustufen aus"
+  },
+  "grayscale_on": {
+    "message": "Graustufen an"
+  },
+  "pause_until": {
+    "message": "Pause bis $TIME$",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "14:30"
+      }
+    }
+  },
+  "import_help": {
+    "message": "Ersetzt den Modus und beide Listen. Schalter und Pause bleiben erhalten."
+  },
+  "status_unsupported": {
+    "message": "Nicht unterstützt"
+  },
+  "status_setup": {
+    "message": "Zugriff fehlt"
+  },
+  "status_off": {
+    "message": "Ausgeschaltet"
+  },
+  "status_paused": {
+    "message": "Pause"
+  },
+  "status_exception": {
+    "message": "Farbausnahme"
+  },
+  "status_unselected": {
+    "message": "Nicht ausgewählt"
+  },
+  "status_wanted": {
+    "message": "Anwendung wird geprüft"
+  },
+  "status_active": {
+    "message": "Grau aktiv"
+  },
+  "status_pending": {
+    "message": "Anwendung noch nicht bestätigt – erneut prüfen"
+  },
+  "status_sleeping": {
+    "message": "Tab schläft – zum Abgleichen öffnen"
+  },
+  "status_reload": {
+    "message": "Anwendung oder Bereinigung nicht bestätigt – Seite neu laden"
+  },
+  "action_required": {
+    "message": "Aktion erforderlich"
+  },
+  "enabled": {
+    "message": "Eingeschaltet"
+  },
+  "badge_on": {
+    "message": "AN"
+  },
+  "badge_off": {
+    "message": "AUS"
+  },
+  "sync_failed": {
+    "message": "Muted · Abgleich fehlgeschlagen. Menü öffnen; ggf. Seite neu laden."
+  },
+  "error_access_denied": {
+    "message": "Seitenzugriff abgelehnt. Der bisherige Zustand bleibt erhalten."
+  },
+  "error_worker_unavailable": {
+    "message": "Worker nicht erreichbar. Erweiterung neu laden."
+  },
+  "error_domain_text": {
+    "message": "Domain muss Text sein."
+  },
+  "error_invalid_domain": {
+    "message": "Nur einen gültigen Hostnamen ohne Pfad, Port oder Wildcard eingeben."
+  },
+  "error_fields": {
+    "message": "Unbekannte oder fehlende Felder."
+  },
+  "error_mode": {
+    "message": "Ungültiger Modus."
+  },
+  "error_rule_limit": {
+    "message": "Höchstens 200 Domain-Regeln insgesamt erlaubt."
+  },
+  "error_state_schema": {
+    "message": "Unbekanntes oder beschädigtes Zustandsschema."
+  },
+  "error_permission_cleanup": {
+    "message": "Ungültige Rechtebereinigung."
+  },
+  "error_file_size": {
+    "message": "Datei darf höchstens 64 KiB groß sein."
+  },
+  "error_import_version": {
+    "message": "Unbekannte Importversion."
+  },
+  "error_invalid_json": {
+    "message": "Die Datei enthält kein gültiges JSON."
+  },
+  "error_sender": {
+    "message": "Unzulässiger Absender."
+  },
+  "error_command": {
+    "message": "Unbekannter Befehl."
+  },
+  "error_tab": {
+    "message": "Ungültiger Tab."
+  },
+  "error_switch": {
+    "message": "Ungültiger Schalter."
+  },
+  "error_pause_duration": {
+    "message": "Ungültige Pausendauer."
+  },
+  "error_list": {
+    "message": "Unbekannte Liste."
+  },
+  "error_import": {
+    "message": "Ungültiger Import."
+  },
+  "error_secure_storage": {
+    "message": "Sicherer Speicherzugriff ist nicht verfügbar."
+  },
+  "error_initialization": {
+    "message": "Initialisierung fehlgeschlagen: Zustand, sicheren Speicherzugriff und Browser-APIs prüfen. Keine neue Filterung. Betroffene Seiten neu laden."
+  },
+  "error_recovery_unneeded": {
+    "message": "Keine beschädigte Initialisierung vorhanden."
+  },
+  "error_pause_disabled": {
+    "message": "Zum Pausieren zuerst einschalten."
+  },
+  "error_document": {
+    "message": "Unzulässiges Dokument."
+  }
+}

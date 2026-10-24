@@ -1,7 +1,7 @@
 export function normalizeDomain(input) {
-  if (typeof input !== 'string') throw new Error('Domain muss Text sein.');
+  if (typeof input !== 'string') throw new Error('error_domain_text');
   const value = input.trim().replace(/\.$/, '').toLowerCase();
-  const invalid = () => { throw new Error('Nur einen gültigen Hostnamen ohne Pfad, Port oder Wildcard eingeben.'); };
+  const invalid = () => { throw new Error('error_invalid_domain'); };
   if (!value || /[\s/\\@?#*%<>]/u.test(value)) invalid();
   if (value.startsWith('[')) {
     if (!/^\[[0-9a-f:]+\]$/.test(value)) invalid();

@@ -1,14 +1,16 @@
+import { t, errorText } from './i18n.js';
+
 export function requestFromClick(api, origins, commit) {
   // No await, messaging, or asynchronous validation before permissions.request.
   return api.permissions.request({origins}).then(granted => {
-    if (!granted) throw new Error('Seitenzugriff abgelehnt. Der bisherige Zustand bleibt erhalten.');
+    if (!granted) throw new Error('error_access_denied');
     return commit();
   });
 }
 
 export async function command(message) {
   const response = await chrome.runtime.sendMessage(message);
-  if (!response?.ok) throw new Error(response?.error || 'Worker nicht erreichbar. Erweiterung neu laden.');
+  if (!response?.ok) throw new Error(response?.error || 'error_worker_unavailable');
   return response.value;
 }
 
@@ -20,15 +22,13 @@ export function watch(render) {
   });
 }
 
-export const labels = {
-  unsupported:'Nicht unterstützt', setup:'Zugriff fehlt',
-  off:'Ausgeschaltet', paused:'Pause', exception:'Farbausnahme', unselected:'Nicht ausgewählt',
-  wanted:'Anwendung wird geprüft', active:'Grau aktiv',
-  pending:'Anwendung noch nicht bestätigt – erneut prüfen', sleeping:'Tab schläft – zum Abgleichen öffnen', reload:'Anwendung oder Bereinigung nicht bestätigt – Seite neu laden'
-};
+export function statusLabel(reason) {
+  const label = t(`status_${reason}`);
+  return label === `status_${reason}` ? t('status_pending') : label;
+}
 
 export function el(id) { return document.getElementById(id); }
-export function showError(error) { el('error').textContent = error?.message ?? String(error); }
+export function showError(error) { el('error').textContent = errorText(error); }
 export function busy(value) { document.querySelectorAll('button,input,select').forEach(node=>{node.disabled=value;}); }
 export function run(operation, render) {
   running++;

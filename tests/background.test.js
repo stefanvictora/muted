@@ -20,9 +20,9 @@ test('Tab-Fehler bleiben im Seitenstatus und überschreiben weder Icon noch Tool
   model.origins=['http://*/*','https://*/*'];model.tabs=[{id:1,url:'https://gone.example/'}];model.failTab=1;
   const worker=installBackground(api);await worker.start();
   for (const [command,badge,title] of [
-    [{type:'status'},'ON','Eingeschaltet'],
-    [{type:'pause',minutes:5},'II','Pause'],
-    [{type:'enabled',value:false},'OFF','Ausgeschaltet']
+    [{type:'status'},'ON','On'],
+    [{type:'pause',minutes:5},'II','Paused'],
+    [{type:'enabled',value:false},'OFF','Off']
   ]) {
     const status=await worker.handle(command,sender);
     assert.equal(status.pages[1].reason,'reload');

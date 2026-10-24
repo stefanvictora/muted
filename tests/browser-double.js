@@ -1,4 +1,5 @@
 import { matchesDomain } from '../extension/core/domains.js';
+import { i18nDouble } from './i18n-double.js';
 
 export function browserDouble(saved) {
   const events = () => { const listeners=[]; return {addListener:fn=>listeners.push(fn), emit:(...args)=>listeners.forEach(fn=>fn(...args))}; };
@@ -12,6 +13,7 @@ export function browserDouble(saved) {
     return g[2] === '*' || (g[2].startsWith('*.') && matchesDomain(r[2].replace(/^\*\./,''),g[2].slice(2)));
   };
   const api = {
+    i18n: i18nDouble(),
     runtime: { id:'test-id', getURL:path=>`chrome-extension://test-id/${path}`, sendMessage:async message=>{model.notifications.push(message);}, onMessage:events(), onStartup:events(), onInstalled:events() },
     storage: {local: {
       setAccessLevel:async()=>{if(model.failAccess) throw new Error('access'); model.trusted=true;},

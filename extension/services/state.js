@@ -1,7 +1,7 @@
 import { defaultState, validateState } from '../core/schema.js';
 
 export async function readState(api) {
-  if (!api.storage.local.setAccessLevel) throw new Error('Sicherer Speicherzugriff ist nicht verfügbar.');
+  if (!api.storage.local.setAccessLevel) throw new Error('error_secure_storage');
   await api.storage.local.setAccessLevel({ accessLevel: 'TRUSTED_CONTEXTS' });
   const { state } = await api.storage.local.get('state');
   return state === undefined ? defaultState() : validateState(state);
