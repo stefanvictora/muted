@@ -34,6 +34,11 @@ function render(next) {
   el('recover').disabled=!!state;
   el('color-section').hidden=state?.mode!=='global';
   el('gray-section').hidden=state?.mode!=='selected';
+  const accessDetails=el('access-details');
+  const showAccess=state?.mode==='selected' || !!state?.permissionTransition;
+  if (showAccess && (accessDetails.hidden || state.permissionTransition)) accessDetails.open=true;
+  if (!showAccess) accessDetails.open=false;
+  accessDetails.hidden=!showAccess;
   if (!state) {
     el('status').textContent=snapshot.error;
     document.querySelectorAll('button,input,select').forEach(node=>{node.disabled=!['recover','refresh'].includes(node.id);});
@@ -44,7 +49,6 @@ function render(next) {
   if (next) { el('mode').value=state.mode; modeHelp(); }
   grantOrigins=state.mode==='global'?BROAD_HOSTS:state.grayscaleSites.flatMap(hostPatterns);
   const missingAccess=state.mode==='global'?!snapshot.grants.global:state.grayscaleSites.some(domain=>!snapshot.grants.sites.includes(domain));
-  if (next && (missingAccess || state.permissionTransition)) el('access-details').open=true;
   el('grant').textContent=state.mode==='global'?'Alle Websites freigeben':'Ausgewählte Websites freigeben';
   el('grant').disabled=!grantOrigins.length || !missingAccess || !!state.permissionTransition;
   el('grant').hidden=!grantOrigins.length || !missingAccess || !!state.permissionTransition;
