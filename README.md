@@ -67,13 +67,16 @@ the extension itself still needs no build step or runtime dependencies.
 
 ```powershell
 npm ci                      # Install the pinned development tools
-npm run format              # Format JavaScript, JSON, HTML, and CSS
+npm run format              # Format code and workflow files
 npm run format:check        # Check formatting without changing files
 npm run check               # Check formatting and run all tests
 npm test
 npm run package             # Create a versioned folder under releases/
 npm run package -- --zip    # Also create a ZIP archive and checksum (Windows PowerShell)
 ```
+
+GitHub Actions runs `npm ci` and `npm run check` on every push and pull request,
+using Node.js 24 on Ubuntu.
 
 Packaging runs the tests and verifies the runtime files against a generated SHA-256 manifest.
 It creates a new snapshot without overwriting older packages or changing your active installation.

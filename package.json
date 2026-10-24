@@ -5,8 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "format": "oxfmt --write extension tests tools package.json .oxfmtrc.json",
-    "format:check": "oxfmt --check extension tests tools package.json .oxfmtrc.json",
+    "format": "oxfmt --write .github extension tests tools package.json .oxfmtrc.json",
+    "format:check": "oxfmt --check .github extension tests tools package.json .oxfmtrc.json",
     "check": "npm run format:check && npm test",
     "test": "node --test",
     "package": "node tools/package.mjs"

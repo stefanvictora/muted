@@ -49,10 +49,14 @@ Use Node.js 22.12 or newer and run `npm ci` to install the development tools fro
 `package-lock.json`. Oxfmt is pinned as a development-only dependency and is not included
 in the installable extension.
 
-- `npm run format` formats code in `extension/`, `tests/`, and `tools/`, plus `package.json`
+- `npm run format` formats code in `.github/`, `extension/`, `tests/`, and `tools/`, plus `package.json`
   and `.oxfmtrc.json`.
 - `npm run format:check` checks the same files without changing them.
 - `npm run check` checks formatting and then runs the behavior tests.
+
+The workflow in `.github/workflows/ci.yml` runs `npm ci` and `npm run check` on every
+push and pull request, using Node.js 24 on Ubuntu. It uses read-only repository permissions
+and pins the checkout/setup actions to specific release commits.
 
 The configuration uses two spaces, single quotes in JavaScript, semicolons, a 100-character
 print width, and LF line endings. It does not sort imports or package fields. Generated test
