@@ -1,0 +1,12 @@
+{
+  "browser": "Edg/156.0.4314.42",
+  "checks": [
+    "Action gewährt temporären Testzugriff; activeTab wird nicht als Dauerfreigabe verwendet",
+    "Echte isolierte Injektion, doppelte Controller-Datei und CSS ergeben grayscale(1)",
+    "Wurzelklasse wird nach Überschreiben wiederhergestellt",
+    "Abschalten stellt ursprünglichen Seitenfilter wieder her; Beobachter bleibt aus",
+    "Keine dauerhaften Hostfreigaben durch Testaktion"
+  ],
+  "errors": [],
+  "scope": "Controller/CSS über echten activeTab-Testzugriff; keine dauerhaften Hostrechte erteilt"
+}

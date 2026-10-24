@@ -1,0 +1,54 @@
+import { command, requestFromClick, labels, el, run, showError } from '../ui/api.js';
+import { target, decide, BROAD_HOSTS } from '../core/policy.js';
+import { matchesDomain, hostPatterns, exactHost } from '../core/domains.js';
+
+let snapshot, tab, action, origins=[], poll;
+function render(next) {
+  if (next) snapshot=next;
+  if (!snapshot) return;
+  clearTimeout(poll);
+  if(snapshot.applying) poll=setTimeout(()=>command({type:'status'}).then(render).catch(showError),250);
+  const state=snapshot.state, page=target(tab?.url);
+  el('host').textContent=page?.host ?? 'Keine unterstützte Website';
+  el('enabled').disabled=!state || !!state.permissionTransition;
+  el('setup').hidden=!state || state.mode!=='global' || snapshot.grants?.global;
+  el('site').disabled=true; action=null;
+  document.querySelectorAll('[data-minutes]').forEach(button=>{button.disabled=!state?.enabled || !!state.permissionTransition;});
+  if (!state) { el('status').textContent=snapshot.error; return; }
+  const decision=decide(state,tab?.url,snapshot.grants,Date.now());
+  const confirmed=snapshot.pages?.[tab?.id];
+  const reason=confirmed?.host===page?.host && confirmed?.reason ? confirmed.reason : decision.reason;
+  el('status').textContent=labels[reason] ?? labels.pending;
+  el('enabled').checked=state.enabled;
+  el('until').textContent=state.pauseUntil ? `Pause bis ${new Date(state.pauseUntil).toLocaleTimeString('de-AT')}` : '';
+  el('resume').hidden=!state.pauseUntil;
+  el('resume').disabled=!!state.permissionTransition;
+  el('grant').disabled=!!state.permissionTransition;
+  if (!page) { el('scope').textContent='Browserseiten, Stores, lokale Dateien und PDF-Ansichten sind nicht unterstützt.'; return; }
+  el('scope').textContent=`${page.host} · ${exactHost(page.host)?'nur dieser Host':'einschließlich Subdomains'}`;
+  const list=state.mode==='global'?'colorExceptions':'grayscaleSites';
+  const matching=state[list].filter(domain=>matchesDomain(page.host,domain));
+  const inherited=matching.some(domain=>domain!==page.host);
+  el('site-note').textContent=inherited ? `Übergeordnete Regel: ${matching.join(', ')}. Für eine feinere Auswahl diese Regel in den Einstellungen ersetzen.` : state.mode==='selected' && matching.length ? 'Entfernen bereinigt Seitenrechte. Verbleibende Regeln danach in den Einstellungen erneut freigeben.' : '';
+  const remove=matching.includes(page.host);
+  el('site').textContent=state.mode==='global' ? (remove?'Grau schalten':'Farbig lassen') : (remove?'Farbig lassen':'Grau schalten');
+  el('site').disabled=inherited || !!state.permissionTransition;
+  action={type:remove?'remove':'add',list,domain:page.host};
+  origins=state.mode==='selected' && !remove ? hostPatterns(page.host) : [];
+}
+const act=operation=>run(operation,render);
+el('enabled').addEventListener('change',()=>act(()=>command({type:'enabled',value:el('enabled').checked})));
+el('grant').addEventListener('click',()=>act(()=>requestFromClick(chrome,BROAD_HOSTS,()=>command({type:'mode',mode:'global'}))));
+el('site').addEventListener('click',()=>{
+  if (!action) return;
+  const prepared={...action};
+  act(()=>origins.length ? requestFromClick(chrome,origins,()=>command(prepared)) : command(prepared));
+});
+document.querySelectorAll('[data-minutes]').forEach(button=>button.addEventListener('click',()=>act(()=>command({type:'pause',minutes:Number(button.dataset.minutes)}))));
+el('resume').addEventListener('click',()=>act(()=>command({type:'resume'})));
+el('options').addEventListener('click',()=>chrome.runtime.openOptionsPage());
+el('refresh').addEventListener('click',()=>act(()=>command({type:'status'})));
+act(async()=>{
+  [tab]=await chrome.tabs.query({active:true,currentWindow:true});
+  return command({type:'status'});
+});

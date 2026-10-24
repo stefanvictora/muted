@@ -1,0 +1,1 @@
+{"name":"local-grayscale","version":"0.1.1","private":true,"type":"module","scripts":{"test":"node --test","package":"node tools/package.mjs"}}

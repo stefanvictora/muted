@@ -1,0 +1,7 @@
+html.local-grayscale-v1-active {
+  filter: grayscale(1) !important;
+}
+/* Fullscreen elements enter the top layer, outside the root filter in Chromium. */
+html.local-grayscale-v1-active :fullscreen {
+  filter: grayscale(1) !important;
+}

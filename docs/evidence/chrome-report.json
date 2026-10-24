@@ -1,0 +1,15 @@
+{
+  "browser": "Chrome/156.0.8078.47",
+  "checks": [
+    "Manifest/Worker/Options laden; keine Hosts ohne Freigabe",
+    "Options initialisiert ohne Laufzeitfehler und horizontalen Überlauf",
+    "Moduswechsel und Domain hinzufügen über echte Options-UI",
+    "Ungültige Domain erzeugt sichtbaren Fehler",
+    "Echter Dateiimport: Vorschau ändert nichts; Bestätigung übernimmt normalisierte Listen",
+    "Blob-Export unter unveränderter strenger CSP; genau die portablen Felder",
+    "Keine externen Requests im beobachteten Options-Kontext"
+  ],
+  "errors": [],
+  "extension": "test-extension-id",
+  "permissionPrompt": "Noch nicht geprüft"
+}

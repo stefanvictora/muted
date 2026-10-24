@@ -1,0 +1,14 @@
+{
+  "browser": "Chrome/156.0.8078.47",
+  "stalled": false,
+  "frozen": true,
+  "checks": [
+    "Worker-Status antwortet",
+    "Vorhandene und neue Seite grau",
+    "Aufwachen nach Ausschalten aktiviert keinen alten Filter",
+    "Ausschalten, Einschalten, Pause und Fortsetzen im echten Browser"
+  ],
+  "errors": [],
+  "scope": "Isoliertes Testmanifest mit festen Hosts; keine native Zustimmung simuliert.",
+  "statusMs": 48
+}

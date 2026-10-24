@@ -1,0 +1,26 @@
+Local Grayscale 0.1.1 — 24. Oktober 2026 — Prüfkandidat
+
+- Behoben: Eine wartende Injektion in einem eingefrorenen Tab blockierte die
+  gemeinsame Worker-Warteschlange. Popup blieb bei „Bitte warten“, neue Seiten
+  bekamen keine Filterentscheidung. In Edge mit genau einem eingefrorenen Tab
+  reproduziert; in Edge und Chrome nach Korrektur geprüft.
+- Tab-Abgleich wartet außerhalb der Zustandswarteschlange. Neue Abgleichwünsche
+  werden zusammengefasst; veraltete Ergebnisse werden nicht veröffentlicht.
+- Einzelne Tab-Operationen sind zeitlich begrenzt. Als schlafend/entladen gemeldete
+  Tabs werden nicht geweckt; Aktivieren/Aufwachen löst einen neuen Abgleich aus.
+- Verspätete Aktivierungen prüfen beim tatsächlichen Ausführen den aktuellen
+  Worker-Zustand. Kein Wiederaktivieren einer alten Ein-Einstellung nach Aus.
+- Popup aktualisiert ausstehende Bestätigungen; Status für schlafende Tabs.
+- Vier zusätzliche Regressionstests, insgesamt 27 bestanden. Native Zustimmung
+  im persönlichen Edge-Profil weiterhin zur erneuten manuellen Prüfung offen.
+
+Local Grayscale 0.1.0 — 24. Oktober 2026 — Prüfkandidat
+
+- Lokale Manifest-V3-Runtime ohne externe Abhängigkeiten oder Netzwerkfunktionen.
+- Globale/ausgewählte Betriebsart mit unabhängigen Domain-Listen und optionalen Hostrechten.
+- Persistenter Hauptschalter, absolute Pausenfristen und Alarm-Wiederherstellung.
+- Serialisierter Worker, persistente Revisionen und wiederanlaufender Rechteabbau.
+- Idempotenter isolierter Controller, Root-CSS und begrenzte Beobachter.
+- Deutsches Popup, Einstellungen, Freigabeanzeige, Importvorschau und Blob-Export.
+- TDD mit Node-Testläufer und Browser-API-Doubles; reale Teilprüfungen in Edge/Chrome.
+- Vollständige native Browserabnahme noch offen; keine automatische Installation.
