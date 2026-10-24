@@ -1,12 +1,35 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Local Grayscale</title><link rel="stylesheet" href="../ui/style.css"><script type="module" src="popup.js"></script></head>
-<body class="popup"><main>
-  <header><span class="mark" aria-hidden="true"></span><div><p class="eyebrow">Weniger Reize</p><h1>Local Grayscale</h1></div></header>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Local Grayscale</title>
+  <link rel="stylesheet" href="../ui/style.css">
+  <script type="module" src="popup.js"></script>
+</head>
+<body class="popup">
+<main>
+  <header class="brand"><span class="mark" aria-hidden="true"></span><h1>Local Grayscale</h1></header>
   <p id="error" role="alert"></p>
-  <section class="card" aria-label="Aktuelle Website"><p id="host" class="host muted">Website wird geprüft …</p><p id="status" class="status" aria-live="polite">Bitte warten</p><p id="until" class="small"></p></section>
-  <div class="row spread"><label for="enabled">Graustufen eingeschaltet</label><input id="enabled" type="checkbox" disabled></div>
-  <section id="setup" class="card" hidden><p class="small">„Alles grau“ benötigt Zugriff auf alle normalen HTTP-/HTTPS-Seiten. Der mitgelieferte Code steuert ausschließlich den Filter.</p><button id="grant" class="primary wide">Seitenzugriff bewusst freigeben</button></section>
-  <section class="card"><p id="scope" class="small">Domain einschließlich Subdomains</p><button id="site" class="wide" disabled>Website-Regel</button><p id="site-note" class="small muted"></p></section>
-  <section aria-label="Globale Pause"><h2>Pause in diesem Browser</h2><div class="row"><button data-minutes="5">5 Min.</button><button data-minutes="15">15 Min.</button><button data-minutes="30">30 Min.</button></div><button id="resume" class="wide" hidden>Pause beenden</button></section>
-  <footer class="row spread"><button id="options">Einstellungen</button><button id="refresh">Erneut prüfen</button></footer>
-</main></body></html>
+  <div class="toggle-row"><label for="enabled">Graustufen</label><input id="enabled" class="switch" type="checkbox" role="switch" disabled></div>
+  <section class="card site-card" aria-label="Aktuelle Website">
+    <p id="host" class="host">Website wird geprüft …</p>
+    <p id="status" class="status" aria-live="polite">Bitte warten</p>
+    <p id="until" class="small muted"></p>
+    <button id="site" class="wide" disabled>Website-Regel</button>
+    <p id="scope" class="small muted">Inklusive Subdomains</p>
+    <p id="site-note" class="small muted"></p>
+  </section>
+  <section id="setup" class="notice" hidden>
+    <p>Zugriff auf alle Websites erforderlich.</p>
+    <button id="grant" class="primary wide">Zugriff erlauben</button>
+  </section>
+  <section class="pause-section" aria-labelledby="pause-heading">
+    <h2 id="pause-heading">Pausieren</h2>
+    <div class="pause-buttons"><button data-minutes="5">5 Min.</button><button data-minutes="15">15 Min.</button><button data-minutes="30">30 Min.</button></div>
+    <button id="resume" class="wide" hidden>Pause beenden</button>
+  </section>
+  <nav class="popup-actions" aria-label="Weitere Aktionen"><button id="options" class="quiet">Einstellungen <span aria-hidden="true">↗</span></button><button id="refresh" class="quiet">Aktualisieren</button></nav>
+</main>
+</body>
+</html>

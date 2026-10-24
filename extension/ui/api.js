@@ -13,7 +13,7 @@ export async function command(message) {
 }
 
 export const labels = {
-  unsupported:'Nicht unterstützt', setup:'Einrichtung: Seitenzugriff fehlt', transition:'Rechtebereinigung ausstehend',
+  unsupported:'Nicht unterstützt', setup:'Zugriff fehlt', transition:'Rechtebereinigung ausstehend',
   off:'Ausgeschaltet', paused:'Pause', exception:'Farbausnahme', unselected:'Nicht ausgewählt',
   permission:'Seitenzugriff fehlt', wanted:'Anwendung wird geprüft', active:'Grau aktiv',
   pending:'Anwendung noch nicht bestätigt – erneut prüfen', sleeping:'Tab schläft – zum Abgleichen öffnen', reload:'Anwendung oder Bereinigung nicht bestätigt – Seite neu laden'

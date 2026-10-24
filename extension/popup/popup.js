@@ -20,16 +20,16 @@ function render(next) {
   const reason=confirmed?.host===page?.host && confirmed?.reason ? confirmed.reason : decision.reason;
   el('status').textContent=labels[reason] ?? labels.pending;
   el('enabled').checked=state.enabled;
-  el('until').textContent=state.pauseUntil ? `Pause bis ${new Date(state.pauseUntil).toLocaleTimeString('de-AT')}` : '';
+  el('until').textContent=state.pauseUntil ? `Bis ${new Date(state.pauseUntil).toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})}` : '';
   el('resume').hidden=!state.pauseUntil;
   el('resume').disabled=!!state.permissionTransition;
   el('grant').disabled=!!state.permissionTransition;
   if (!page) { el('scope').textContent='Browserseiten, Stores, lokale Dateien und PDF-Ansichten sind nicht unterstützt.'; return; }
-  el('scope').textContent=`${page.host} · ${exactHost(page.host)?'nur dieser Host':'einschließlich Subdomains'}`;
+  el('scope').textContent=exactHost(page.host)?'Nur diese Adresse':'Inklusive Subdomains';
   const list=state.mode==='global'?'colorExceptions':'grayscaleSites';
   const matching=state[list].filter(domain=>matchesDomain(page.host,domain));
   const inherited=matching.some(domain=>domain!==page.host);
-  el('site-note').textContent=inherited ? `Übergeordnete Regel: ${matching.join(', ')}. Für eine feinere Auswahl diese Regel in den Einstellungen ersetzen.` : state.mode==='selected' && matching.length ? 'Entfernen bereinigt Seitenrechte. Verbleibende Regeln danach in den Einstellungen erneut freigeben.' : '';
+  el('site-note').textContent=inherited ? `Geregelt über ${matching.join(', ')}. In den Einstellungen ändern.` : state.mode==='selected' && matching.length ? 'Beim Entfernen werden Freigaben zurückgesetzt. Andere Websites danach erneut freigeben.' : '';
   const remove=matching.includes(page.host);
   el('site').textContent=state.mode==='global' ? (remove?'Grau schalten':'Farbig lassen') : (remove?'Farbig lassen':'Grau schalten');
   el('site').disabled=inherited || !!state.permissionTransition;

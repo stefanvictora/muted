@@ -1,14 +1,64 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Local Grayscale · Einstellungen</title><link rel="stylesheet" href="../ui/style.css"><script type="module" src="options.js"></script></head>
-<body><main>
-  <header><span class="mark" aria-hidden="true"></span><div><p class="eyebrow">Lokal. Bewusst. Übersichtlich.</p><h1>Local Grayscale</h1></div></header>
-  <p class="muted">100 Prozent Graustufen. Einstellungen und Pausen gelten nur in diesem Browser.</p>
-  <p id="error" role="alert"></p><p id="status" role="status"></p>
-  <section id="recovery" class="card" hidden><h2>Gespeicherten Zustand reparieren</h2><p>Unbekannte oder beschädigte Einstellungen werden nicht automatisch ersetzt. Ein Zurücksetzen löscht beide Listen, schaltet aus und entfernt optionale Seitenfreigaben. Betroffene Seiten danach neu laden.</p><button id="recover">Einstellungen bewusst zurücksetzen</button></section>
-  <section class="card"><h2>Betriebsart</h2><label for="mode">Gewünschter Modus</label><select id="mode"><option value="global">Alles grau, außer …</option><option value="selected">Nur ausgewählte Websites grau</option></select><p id="mode-help" class="small"></p><button id="apply-mode" class="primary">Modus übernehmen</button></section>
-  <section class="card"><h2>Seitenzugriff</h2><p id="access" class="small"></p><div class="row"><button id="grant">Seiten freigeben</button><button id="repair">Seitenrechte bereinigen</button><button id="refresh">Erneut prüfen</button></div><details><summary>Tatsächliche optionale Freigaben</summary><ul id="origins"></ul></details><p class="small muted">Eine gespeicherte Regel ist noch keine Browserfreigabe. Ausschalten, Pause und Farbausnahmen entziehen keine Rechte. Nach Bereinigung müssen ausgewählte Websites erneut bewusst freigegeben werden.</p></section>
-  <section class="card"><h2>Farbausnahmen <span id="color-active" class="tag"></span></h2><label for="color-input">Host hinzufügen · einschließlich Subdomains</label><div class="row"><input id="color-input" type="text" placeholder="z. B. maps.google.com" maxlength="300" spellcheck="false"><button id="color-add">Hinzufügen</button></div><ul id="color-list"></ul></section>
-  <section class="card"><h2>Graue Websites <span id="gray-active" class="tag"></span></h2><label for="gray-input">Host hinzufügen · einschließlich Subdomains</label><div class="row"><input id="gray-input" type="text" placeholder="z. B. reddit.com" maxlength="300" spellcheck="false"><button id="gray-add">Hinzufügen</button></div><ul id="gray-list"></ul><p class="small muted">Beim Entfernen aktiver ausgewählter Regeln werden die Seitenrechte bereinigt. Auch überlappende Regeln erhalten dadurch keine unbemerkten breiten Rechte.</p></section>
-  <section class="card"><h2>Lokale Sicherung</h2><p class="small">Export enthält nur Modus und beide Listen. Import ersetzt sie vollständig; Schalter und Pause bleiben erhalten.</p><button id="export">JSON exportieren</button><p><label for="import-file">JSON-Datei für Vorschau wählen (max. 64 KiB)</label><br><input id="import-file" type="file" accept="application/json,.json"></p><div id="preview-area" hidden><h2>Importvorschau</h2><pre id="preview"></pre><p id="import-help" class="small"></p><button id="import-apply" class="primary">Vorschau vollständig übernehmen</button><button id="import-grant" hidden>Globalen Zugriff für Import freigeben</button><button id="import-cancel">Verwerfen</button></div></section>
-  <footer><p id="version" class="small"></p><p class="small muted">Persönlich und lokal als entpackte Erweiterung. Updates nur durch bewussten Austausch geprüfter Dateien, anschließend in beiden Browsern neu laden. Kein automatischer Updater. Browserseiten, Stores, Dateien, private Fenster und PDF-Ansichten sind nicht unterstützt.</p></footer>
-</main></body></html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Local Grayscale · Einstellungen</title>
+  <link rel="stylesheet" href="../ui/style.css">
+  <script type="module" src="options.js"></script>
+</head>
+<body class="options">
+<main>
+  <header class="brand"><span class="mark" aria-hidden="true"></span><span>Local Grayscale</span></header>
+  <div class="page-heading"><h1>Einstellungen</h1><p id="status" class="small muted" role="status"></p></div>
+  <p id="error" role="alert"></p>
+  <section id="recovery" class="card" hidden>
+    <h2>Einstellungen zurücksetzen</h2>
+    <p>Die gespeicherten Einstellungen sind beschädigt. Zurücksetzen löscht beide Listen, schaltet den Filter aus und entfernt Seitenfreigaben. Betroffene Seiten danach neu laden.</p>
+    <button id="recover">Zurücksetzen</button>
+  </section>
+  <section class="card">
+    <h2>Graustufen anwenden</h2>
+    <label class="sr-only" for="mode">Websites auswählen</label>
+    <div class="mode-row"><select id="mode" aria-describedby="mode-help"><option value="global">Alle Websites mit Ausnahmen</option><option value="selected">Nur ausgewählte Websites</option></select><button id="apply-mode" class="primary">Übernehmen</button></div>
+    <p id="mode-help" class="small muted"></p>
+  </section>
+  <section class="card">
+    <div class="section-heading"><h2>Farbig lassen</h2><span id="color-active" class="tag"></span></div>
+    <label class="sr-only" for="color-input">Website farbig lassen</label>
+    <div class="input-row"><input id="color-input" type="text" placeholder="z. B. maps.google.com" maxlength="300" spellcheck="false" autocapitalize="none" aria-describedby="color-hint"><button id="color-add">Hinzufügen</button></div>
+    <p id="color-hint" class="field-hint">Gilt auch für Subdomains.</p>
+    <ul id="color-list" class="site-list" aria-label="Farbige Websites"></ul>
+  </section>
+  <section class="card">
+    <div class="section-heading"><h2>Grau schalten</h2><span id="gray-active" class="tag"></span></div>
+    <label class="sr-only" for="gray-input">Website grau schalten</label>
+    <div class="input-row"><input id="gray-input" type="text" placeholder="z. B. reddit.com" maxlength="300" spellcheck="false" autocapitalize="none" aria-describedby="gray-hint"><button id="gray-add">Hinzufügen</button></div>
+    <p id="gray-hint" class="field-hint">Gilt auch für Subdomains.</p>
+    <ul id="gray-list" class="site-list" aria-label="Graue Websites"></ul>
+    <p id="gray-note" class="small muted" hidden>Entfernen setzt Seitenfreigaben zurück. Verbleibende Websites danach erneut freigeben.</p>
+  </section>
+  <details id="access-details" class="card disclosure">
+    <summary>Seitenzugriff</summary>
+    <div class="disclosure-body">
+      <p id="access" class="small"></p>
+      <div class="row"><button id="grant">Zugriff erlauben</button><button id="repair">Freigaben zurücksetzen</button><button id="refresh">Aktualisieren</button></div>
+      <details class="access-origins"><summary>Freigegebene Adressen</summary><ul id="origins"></ul></details>
+      <p class="small muted">Ausschalten, Pausieren und Farbausnahmen ändern keine Browserrechte. Nach dem Zurücksetzen müssen Websites erneut freigegeben werden.</p>
+    </div>
+  </details>
+  <details class="card disclosure">
+    <summary>Import &amp; Export</summary>
+    <div class="disclosure-body">
+      <p class="small muted">Sichert den Modus und beide Listen. Ein Import ersetzt diese Einstellungen.</p>
+      <button id="export">Als JSON exportieren</button>
+      <div class="file-field"><label for="import-file">JSON importieren <span class="muted">· max. 64 KB</span></label><input id="import-file" type="file" accept="application/json,.json"></div>
+      <div id="preview-area" hidden>
+        <h2>Importvorschau</h2><pre id="preview"></pre><p id="import-help" class="small"></p>
+        <div class="row"><button id="import-apply" class="primary">Importieren</button><button id="import-grant" hidden>Zugriff auf alle Websites erlauben</button><button id="import-cancel">Abbrechen</button></div>
+      </div>
+    </div>
+  </details>
+</main>
+</body>
+</html>
