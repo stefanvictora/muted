@@ -1,0 +1,3 @@
+# Keep text files identical across platforms so release hashes survive a checkout.
+* text=auto eol=lf
+*.png binary

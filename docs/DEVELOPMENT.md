@@ -75,3 +75,6 @@ short guides, and an automatically verified hash manifest. `--zip` also creates 
 and requires Windows PowerShell. Packaging does not install the extension.
 `node tools/verify.mjs <package-folder>` remains available as an optional comparison tool.
 Historical verification records are not included in new packages.
+
+`.gitattributes` keeps text files on LF line endings across platforms so the checked-in
+runtime hashes also match a fresh checkout. PNG files remain binary.
