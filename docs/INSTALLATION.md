@@ -4,12 +4,19 @@
 
 Follow the [README installation steps](../README.md#install) to load the extension.
 
-After updating the files in the loaded extension folder:
+Release installations do not update automatically. Keep the loaded folder at the same path
+when updating so the browser continues to use the existing installation and settings.
 
-1. Open `chrome://extensions` or `edge://extensions`.
-2. Click **Reload** on Muted's card.
-3. Reopen the popup or settings page.
-4. If a website still uses the old filter, reload that website.
+1. Download the `muted-….zip` package from the [latest release](https://github.com/stefanvictora/muted/releases/latest).
+2. Extract the ZIP into a separate folder.
+3. Back up your currently loaded `extension` folder.
+4. Replace the contents of that loaded folder with the new package's `extension` contents.
+5. Open `chrome://extensions` or `edge://extensions`.
+6. Click **Reload** on Muted's card.
+7. Reopen the popup or settings page.
+8. If a website still uses the old filter, reload that website.
+
+If you installed from a Git checkout, update that checkout and follow steps 5–8.
 
 Edge and Chrome store their settings independently.
 

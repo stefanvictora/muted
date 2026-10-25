@@ -17,18 +17,19 @@ The interface uses your browser's language: German or English, with English as t
 
 ## Install
 
-No build step is needed. Load the extension directly from this repository:
+No build step is needed.
 
-1. Clone the repository or download and extract its ZIP archive.
-2. Open `chrome://extensions` in Chrome or `edge://extensions` in Edge.
-3. Enable **Developer mode**.
-4. Click **Load unpacked** and select the repository's `extension` folder.
-5. Pin Muted to the toolbar, open its popup, and click **Allow access**.
+1. Download the `muted-….zip` package from the [latest release](https://github.com/stefanvictora/muted/releases/latest).
+2. Extract the ZIP into a folder you will keep on your computer.
+3. Open `chrome://extensions` in Chrome or `edge://extensions` in Edge.
+4. Enable **Developer mode**.
+5. Click **Load unpacked** and select the package's `extension` folder.
+6. Pin Muted to the toolbar, open its popup, and click **Allow access**.
 
-If you are using a packaged copy, select the `extension` folder inside that package.
+You can also clone this repository and load its `extension` folder directly.
 Disable other copies of Muted to avoid running multiple instances.
 
-For controls, updates, and troubleshooting, see [Installation and usage](docs/INSTALLATION.md).
+Updates are manual. For controls, updates, and troubleshooting, see [Installation and usage](docs/INSTALLATION.md).
 
 ## Privacy and permissions
 

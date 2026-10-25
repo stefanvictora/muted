@@ -84,6 +84,32 @@ files, current guides, the README screenshot, and a verified SHA-256 manifest. I
 `npm run package -- --zip` also creates an archive and checksum using Windows PowerShell.
 `node tools/verify.mjs <package-folder>` checks an existing package.
 
+### Publish a GitHub release
+
+Use Windows PowerShell and an authenticated GitHub CLI for these steps.
+
+1. Set the same version in `extension/manifest.json` and `package.json`.
+2. Update `CHANGELOG.txt` and write release notes in `docs/releases/<version>.md`.
+3. Run `npm ci`.
+4. Run `npm run check`.
+5. Run `npm run package -- --zip`.
+6. Commit the release changes, including `release-manifest.txt`, and push the commit.
+7. Create a draft release with the ZIP and its `.sha256` file, using the pushed commit SHA:
+
+   ```powershell
+   gh release create v<version> <zip-path> <checksum-path> --repo stefanvictora/muted --target <commit-sha> --title "Muted <version>" --notes-file docs/releases/<version>.md --draft
+   ```
+
+8. Check the draft's version, notes, and both attached files.
+9. Publish the draft:
+
+   ```powershell
+   gh release edit v<version> --repo stefanvictora/muted --draft=false --latest
+   ```
+
+Replace angle-bracket placeholders with the release's values. Keep existing tags and
+published assets unchanged; use a new version for subsequent changes.
+
 The README introduces the product; `INSTALLATION.md` covers usage and troubleshooting;
 `SECURITY.md` explains permissions and limitations. Keep architecture and contributor commands
 here. Release changes belong in `CHANGELOG.txt`; old plans and verification records remain in
