@@ -24,7 +24,7 @@ for (const path of [
   'docs/INSTALLATION.md',
   'docs/SECURITY.md',
   'docs/DEVELOPMENT.md',
-  'docs/VERIFICATION.md',
+  'docs/images',
   'README.md',
   'CHANGELOG.txt',
   'LICENSE',

@@ -2,10 +2,7 @@
 
 ## Load and update
 
-1. Open `edge://extensions` in Edge or `chrome://extensions` in Chrome and enable **Developer mode**.
-2. Choose **Load unpacked** and select the repository's `extension` folder. For a packaged copy,
-   use the `extension` subfolder inside the package.
-3. Disable other copies, pin the icon, and click **Allow access** once in the popup.
+Follow the [README installation steps](../README.md#install) to load the extension.
 
 If this folder is already loaded, click **Reload** in the extension manager after making changes.
 Reopen any popup or settings page and reload affected websites if needed to replace older content
@@ -25,6 +22,8 @@ Edge and Chrome store their settings independently.
   or browser permissions. An import shows a preview and applies only after clicking **Import**.
 - The interface follows the browser's interface language: German or English, with English
   as the fallback for other languages.
+
+See [Permissions and limitations](SECURITY.md) for unsupported pages and rendering limitations.
 
 ## Existing settings
 

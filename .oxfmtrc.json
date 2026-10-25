@@ -8,5 +8,5 @@
   "endOfLine": "lf",
   "sortImports": false,
   "sortPackageJson": false,
-  "ignorePatterns": [".test-artifacts/**", "releases/**", "docs/evidence/**"]
+  "ignorePatterns": [".test-artifacts/**", "releases/**"]
 }
