@@ -4,41 +4,70 @@
 
 Follow the [README installation steps](../README.md#install) to load the extension.
 
-If this folder is already loaded, click **Reload** in the extension manager after making changes.
-Reopen any popup or settings page and reload affected websites if needed to replace older content
-scripts. Local file changes may already take effect when an extension page is reopened.
+After updating the files in the loaded extension folder:
+
+1. Open `chrome://extensions` or `edge://extensions`.
+2. Click **Reload** on Muted's card.
+3. Reopen the popup or settings page.
+4. If a website still uses the old filter, reload that website.
+
 Edge and Chrome store their settings independently.
 
-## Controls
+## Website rules
+
+Open **Settings** from the popup. Select a mode under **Apply grayscale**, then click **Apply**:
 
 - **All websites with exceptions:** the **Keep in color** list contains the exceptions.
 - **Selected websites only:** the **Make gray** list contains the websites to filter.
-- The other list remains saved. Both modes use the same access to all websites.
-- The on/off setting is saved. Turning grayscale off ends an active pause.
-- A new pause replaces the previous deadline with the current time plus 5, 15, or 30 minutes.
-  **End pause** resumes normal operation immediately.
-- Domain rules include subdomains. IP addresses and localhost match exactly.
-- Import/export transfers the mode and lists. It does not import the on/off setting, pause,
-  or browser permissions. An import shows a preview and applies only after clicking **Import**.
-- The interface follows the browser's interface language: German or English, with English
-  as the fallback for other languages.
+
+Switching modes keeps both lists. Both modes require access to all websites.
+Website rules include subdomains; IP addresses and `localhost` match exactly.
+
+To add a rule, enter a hostname such as `example.com` and click **Add**.
+Use a hostname without a URL scheme, path, port, or wildcard.
 
 See [Permissions and limitations](SECURITY.md) for unsupported pages and rendering limitations.
 
-## Existing settings
+## On/off and pauses
+
+Use the **Grayscale** switch in the popup to turn the filter on or off. This setting is saved.
+Turning the filter off also ends an active pause.
+
+To pause the filter, click **5 min**, **15 min**, or **30 min**. A new pause starts from the
+time of the click and replaces any previous pause. Click **End pause** to resume filtering
+according to your website rules.
+
+## Import and export
+
+In **Settings**, expand **Import & export**. Click **Export as JSON** to save the mode and
+both website lists to `muted.json`.
+
+To import settings:
+
+1. Select a JSON file under **Import JSON**.
+2. Review the preview. Importing replaces the current mode and both website lists.
+3. Click **Import** to apply the settings, or **Cancel** to keep the current settings.
+
+Importing keeps the current on/off setting, active pause, and browser permissions.
+Export your settings before uninstalling if you want to keep your website lists.
+
+## Updates from 0.1.x
 
 Updating from 0.1.x preserves lists, the on/off setting, and pauses. Older JSON exports remain
-usable. If you previously granted access only to individual websites, allow the shared access
-once. An existing global permission grant is reused.
+usable. If you previously allowed access only to individual websites, click **Allow access**
+to grant access to all websites. If you already granted that access, no new grant is needed.
 
 ## Troubleshooting
 
-When access is missing, an **Allow access** button appears. You can revoke browser permissions
-in the extension manager. If a reload message appears, reload the affected website.
-Corrupted settings can be explicitly reset; this clears both lists and turns the filter off
-while retaining browser access.
+- **Missing website access:** click **Allow access** in the popup or settings page to grant access.
+- **Reload message:** reload the affected website.
+- **Corrupted settings:** in **Settings**, click **Reset** under **Reset settings**.
+  This clears both lists, ends any pause, selects **Selected websites only**, and turns the
+  filter off. Browser permissions remain unchanged. Reload affected websites afterward.
 
-Before larger changes, keep a copy of the working extension folder and optionally a JSON export.
-To roll back, restore the old copy at the same loaded path, then reload the extension and affected
-websites. Export settings before uninstalling. A manual hash check or complete browser acceptance
-test is not required for personal use.
+To prepare for a rollback, keep a copy of the working extension folder before updating.
+To restore that copy:
+
+1. Replace the files at the loaded path with the saved copy.
+2. Click **Reload** on Muted's card in the extension manager.
+3. Reload affected websites.

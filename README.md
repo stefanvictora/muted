@@ -1,21 +1,19 @@
 # Muted
 
-**Less distraction, more focus.**
-
-Muted is a browser extension for Chrome and Edge that turns websites grayscale to help
-reduce visual distractions and keep your attention on what matters. Choose where you want
-less color, and bring it back whenever you need it.
+Muted is a Chrome and Edge extension that applies a grayscale filter to websites.
+It can run on all websites with exceptions, or only on websites you select.
 
 <img src="docs/images/settings.png" alt="Muted settings: grayscale on all websites, with maps.google.com kept in color" width="760">
 
-## Features
+## Usage
 
-- Apply grayscale everywhere with exceptions, or only on selected websites.
-- Keep websites in color when color is useful, such as maps or design tools.
-- Pause for 5, 15, or 30 minutes, or turn grayscale off entirely.
-- Manage website lists with subdomain support and JSON import/export.
-- Use English or German automatically based on your browser's interface language.
-  Other languages fall back to English.
+The toolbar popup lets you change the current website's rule, turn the filter on or off,
+or pause it for 5, 15, or 30 minutes.
+
+In **Settings**, you can switch modes, edit website lists, and import or export them as JSON.
+Website rules include subdomains. Both lists are kept when you switch modes.
+
+The interface uses your browser's language: German or English, with English as the fallback.
 
 ## Install
 
@@ -34,8 +32,7 @@ For controls, updates, and troubleshooting, see [Installation and usage](docs/IN
 
 ## Privacy and permissions
 
-Muted runs entirely in your browser, with no runtime dependencies or network requests.
-The source is available here for you to inspect and load yourself.
+Settings are stored locally in each browser. The extension makes no network requests.
 
 Both modes require a one-time grant of access to all HTTP and HTTPS websites so Muted can
 apply and remove the filter. Your website lists determine where grayscale is active;
@@ -52,11 +49,11 @@ Use Node.js 22.12 or newer:
 ```powershell
 npm ci
 npm run check               # Check formatting and run tests
-npm run package             # Optional: create a verified package under releases/
+npm run package             # Optional: create a package under releases/
 ```
 
 See [Development](docs/DEVELOPMENT.md) for architecture, translations, browser checks, and packaging.
-Release history lives in [CHANGELOG.txt](CHANGELOG.txt).
+See [CHANGELOG.txt](CHANGELOG.txt) for release history.
 
 ## License
 

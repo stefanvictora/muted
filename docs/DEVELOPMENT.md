@@ -21,8 +21,9 @@ on Ubuntu. Formatting covers `.github/`, `extension/`, `tests/`, `tools/`, `pack
 Paths below are relative to `extension/`:
 
 - `core/` contains domain rules, state schema, message validation, and filtering decisions.
-- `services/coordinator.js` owns loaded state and serializes changes. Tab reconciliation runs
-  outside that queue so a sleeping tab cannot block the popup or new pages.
+- `services/coordinator.js` owns loaded state and serializes changes. It reconciles tabs by
+  updating their filters to match the current settings and permissions. This work runs outside
+  the state queue so a sleeping tab cannot block the popup or new pages.
 - `background.js` connects browser events to the coordinator; `content/` applies the filter.
 - `popup/` and `options/` share interface helpers in `ui/`.
 
@@ -30,8 +31,9 @@ State and global access are loaded at worker startup. Status requests use that l
 permission events and explicit access requests refresh permissions. An unchanged script
 registration does not trigger re-registration or a global tab query.
 
-Settings, permissions, new registrations, and expired pauses reconcile existing tabs.
-Tab load/wake events affect only that tab; a confirmed tab is not reinjected on activation.
+Changes to settings or permissions, new script registrations, and expired pauses trigger
+reconciliation of existing tabs. Tab load/wake events affect only that tab; a confirmed tab
+is not reinjected on activation.
 Closing a tab removes its temporary status. Interfaces receive change notifications after
 reconciliation, without polling or triggering further notifications when reading status.
 
