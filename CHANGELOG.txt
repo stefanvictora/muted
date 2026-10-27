@@ -1,3 +1,12 @@
+Muted 0.2.1 — October 27, 2026
+
+- The popup can remove a parent domain's rule from a subdomain. The button is no
+  longer disabled, and a note names the rules affected, including their subdomains.
+- Removing a color exception shows "Make gray again". The same rule removal is
+  available in "Selected websites only" mode through "Keep in color".
+- When several rules include the current website, the popup removes them together
+  in one saved change. Other saved rules remain in place.
+
 Muted 0.2.0 — October 24, 2026
 
 - Renamed to Muted across the interface, tooltips, JSON export, and new packages.

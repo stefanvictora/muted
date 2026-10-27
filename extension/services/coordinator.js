@@ -180,11 +180,11 @@ export function createCoordinator(api, now = Date.now) {
       if (message.type === 'mode') {
         await changeSettings({ ...state, mode: message.mode });
       } else if (message.type === 'import') await changeSettings(parseImport(message.text));
-      else if (['add', 'remove'].includes(message.type)) {
+      else if (['add', 'remove', 'removeMany'].includes(message.type)) {
         const list =
           message.type === 'add'
             ? [...state[message.list], message.domain]
-            : state[message.list].filter((d) => d !== message.domain);
+            : state[message.list].filter((d) => !(message.domains ?? [message.domain]).includes(d));
         await changeSettings({ ...state, [message.list]: list });
       } else if (message.type === 'grants') {
         await readPermissions();

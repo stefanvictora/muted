@@ -243,3 +243,40 @@ test('Eigene Optionsseite darf auch als Browser-Tab Einstellungen ändern', asyn
   );
   assert.equal(result.state.enabled, false);
 });
+
+test('Batch removal validates every domain before changing saved rules', async () => {
+  const { api, model, sender } = browserDouble({
+    ...defaultState(),
+    colorExceptions: ['example.com', 'docs.example.com'],
+  });
+  const worker = createCoordinator(api);
+  await worker.start();
+  const before = structuredClone(model.db.state);
+  for (const domains of [
+    undefined,
+    [],
+    'example.com',
+    ['example.com', 'https://invalid.net'],
+    Array(201).fill('example.com'),
+  ]) {
+    await assert.rejects(
+      worker.handle({ type: 'removeMany', list: 'colorExceptions', domains }, sender),
+    );
+    assert.deepEqual(model.db.state, before);
+  }
+  await assert.rejects(
+    worker.handle({ type: 'removeMany', list: 'unknown', domains: ['example.com'] }, sender),
+  );
+  await assert.rejects(
+    worker.handle(
+      { type: 'removeMany', list: 'colorExceptions', domains: ['example.com'] },
+      { ...sender, id: 'other' },
+    ),
+  );
+  assert.deepEqual(model.db.state, before);
+  await worker.handle(
+    { type: 'removeMany', list: 'colorExceptions', domains: ['EXAMPLE.com.', 'docs.example.com'] },
+    sender,
+  );
+  assert.deepEqual(model.db.state.colorExceptions, []);
+});

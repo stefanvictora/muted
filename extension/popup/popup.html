@@ -39,7 +39,15 @@
         <p id="status" class="status" aria-live="polite" data-i18n="please_wait">Please wait</p>
         <p id="until" class="small muted"></p>
         <div id="site-controls">
-          <button id="site" class="wide" disabled data-i18n="website_rule">Website rule</button>
+          <button
+            id="site"
+            class="wide"
+            disabled
+            data-i18n="website_rule"
+            aria-describedby="scope site-note"
+          >
+            Website rule
+          </button>
           <p id="scope" class="small muted" data-i18n="includes_subdomains">Includes subdomains</p>
           <p id="site-note" class="small muted"></p>
         </div>

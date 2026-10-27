@@ -104,6 +104,9 @@
   "make_gray": {
     "message": "Make gray"
   },
+  "make_gray_again": {
+    "message": "Make gray again"
+  },
   "make_website_gray": {
     "message": "Make website gray"
   },
@@ -155,8 +158,17 @@
   "exact_address": {
     "message": "This address only"
   },
-  "inherited_rule": {
-    "message": "Managed through $DOMAINS$. Change this in Settings.",
+  "remove_inherited_color": {
+    "message": "Removes the color exception for $DOMAINS$ and all subdomains.",
+    "placeholders": {
+      "domains": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "remove_inherited_gray": {
+    "message": "Removes the grayscale rule for $DOMAINS$ and all subdomains.",
     "placeholders": {
       "domains": {
         "content": "$1",

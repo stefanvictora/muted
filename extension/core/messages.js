@@ -21,6 +21,7 @@ export function validateMessage(message, sender, api) {
     grants: [],
     add: ['list', 'domain'],
     remove: ['list', 'domain'],
+    removeMany: ['list', 'domains'],
     import: ['text'],
   };
   if (!message || !Object.hasOwn(fields, message.type)) throw new Error('error_command');
@@ -33,9 +34,18 @@ export function validateMessage(message, sender, api) {
     throw new Error('error_mode');
   if (message.type === 'pause' && ![5, 15, 30].includes(message.minutes))
     throw new Error('error_pause_duration');
-  if (['add', 'remove'].includes(message.type)) {
+  if (['add', 'remove', 'removeMany'].includes(message.type)) {
     if (!['colorExceptions', 'grayscaleSites'].includes(message.list))
       throw new Error('error_list');
+    if (message.type === 'removeMany') {
+      if (
+        !Array.isArray(message.domains) ||
+        !message.domains.length ||
+        message.domains.length > 200
+      )
+        throw new Error('error_fields');
+      return { ...message, domains: message.domains.map(normalizeDomain) };
+    }
     return { ...message, domain: normalizeDomain(message.domain) };
   }
   if (message.type === 'import' && typeof message.text !== 'string')

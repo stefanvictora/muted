@@ -104,6 +104,9 @@
   "make_gray": {
     "message": "Grau schalten"
   },
+  "make_gray_again": {
+    "message": "Wieder grau schalten"
+  },
   "make_website_gray": {
     "message": "Website grau schalten"
   },
@@ -155,8 +158,17 @@
   "exact_address": {
     "message": "Nur diese Adresse"
   },
-  "inherited_rule": {
-    "message": "Geregelt über $DOMAINS$. In den Einstellungen ändern.",
+  "remove_inherited_color": {
+    "message": "Entfernt die Farbausnahme für $DOMAINS$ und alle Subdomains.",
+    "placeholders": {
+      "domains": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "remove_inherited_gray": {
+    "message": "Entfernt die Graustufen-Regel für $DOMAINS$ und alle Subdomains.",
     "placeholders": {
       "domains": {
         "content": "$1",

@@ -51,18 +51,25 @@ function render(next) {
   const list = state.mode === 'global' ? 'colorExceptions' : 'grayscaleSites';
   const matching = state[list].filter((domain) => matchesDomain(page.host, domain));
   const inherited = matching.some((domain) => domain !== page.host);
-  el('site-note').textContent = inherited ? t('inherited_rule', [matching.join(', ')]) : '';
-  const remove = matching.includes(page.host);
+  el('scope').hidden = inherited;
+  el('site-note').textContent = inherited
+    ? t(state.mode === 'global' ? 'remove_inherited_color' : 'remove_inherited_gray', [
+        matching.join(', '),
+      ])
+    : '';
+  const remove = matching.length > 0;
   el('site').textContent =
     state.mode === 'global'
       ? remove
-        ? t('make_gray')
+        ? t('make_gray_again')
         : t('keep_color')
       : remove
         ? t('keep_color')
         : t('make_gray');
-  el('site').disabled = !state.enabled || needsSetup || inherited;
-  action = { type: remove ? 'remove' : 'add', list, domain: page.host };
+  el('site').disabled = !state.enabled || needsSetup;
+  action = remove
+    ? { type: 'removeMany', list, domains: matching }
+    : { type: 'add', list, domain: page.host };
 }
 const act = (operation) => run(operation, render);
 const currentStatus = () =>

@@ -33,6 +33,11 @@ Website rules include subdomains; IP addresses and `localhost` match exactly.
 To add a rule, enter a hostname such as `example.com` and click **Add**.
 Use a hostname without a URL scheme, path, port, or wildcard.
 
+The popup can also remove rules inherited from a parent domain. The note below the button
+names the affected rules. Removing a parent rule affects that domain and its subdomains.
+If several rules include the current website, the button removes all of them together.
+Other saved rules remain in place.
+
 See [Permissions and limitations](SECURITY.md) for unsupported pages and rendering limitations.
 
 ## On/off and pauses
